@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Digitale Fotolijst",
+        "description": "Verbind Home Assistant met de fotolijstserver.",
+        "data": {
+          "name": "Naam",
+          "host": "Host",
+          "port": "Poort",
+          "pin": "Admin-PIN",
+          "actor": "Naam voor logboek"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken met de fotolijst.",
+      "invalid_auth": "De PIN klopt niet.",
+      "unknown": "Onbekende fout."
+    },
+    "abort": {
+      "already_configured": "Deze fotolijst is al ingesteld."
+    }
+  }
+}
