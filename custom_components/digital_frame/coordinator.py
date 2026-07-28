@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+import json
 import logging
 import time
 from typing import Any
@@ -8,12 +9,14 @@ from typing import Any
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .api import DigitalFrameApi, DigitalFrameError
-from .const import DOMAIN
+from .const import CONF_WEATHER_ENTITY, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 SYSTEM_INFO_INTERVAL_SECONDS = 15
+WEATHER_RESEND_INTERVAL_SECONDS = 300
 
 
 def _nested(data: dict[str, Any], *keys: str) -> Any:
@@ -53,6 +56,8 @@ class DigitalFrameCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._system_info: dict[str, Any] | None = None
         self._system_info_error: str | None = None
         self._system_info_last_fetch = 0.0
+        self._weather_last_payload = ""
+        self._weather_last_push = 0.0
 
     async def _async_update_data(self) -> dict[str, Any]:
         try:
@@ -60,6 +65,7 @@ class DigitalFrameCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except DigitalFrameError as err:
             raise UpdateFailed(str(err)) from err
         await self._async_update_system_info(data)
+        await self._async_update_weather(data)
         self._async_fire_state_events(data)
         return data
 
@@ -84,6 +90,74 @@ class DigitalFrameCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             data["systemInfo"] = self._system_info
         if self._system_info_error:
             data["systemInfoError"] = self._system_info_error
+
+    def _weather_entity_id(self) -> str:
+        return str(self.config_entry.options.get(CONF_WEATHER_ENTITY) or "").strip()
+
+    def _weather_payload(self, entity_id: str) -> dict[str, Any]:
+        now = dt_util.utcnow().isoformat()
+        if not entity_id:
+            return {
+                "available": False,
+                "entityId": "",
+                "name": "",
+                "condition": "",
+                "temperature": None,
+                "temperatureUnit": "",
+                "humidity": None,
+                "windSpeed": None,
+                "windSpeedUnit": "",
+                "updatedAt": now,
+            }
+
+        state = self.hass.states.get(entity_id)
+        if state is None:
+            return {
+                "available": False,
+                "entityId": entity_id,
+                "name": entity_id,
+                "condition": "",
+                "temperature": None,
+                "temperatureUnit": "",
+                "humidity": None,
+                "windSpeed": None,
+                "windSpeedUnit": "",
+                "updatedAt": now,
+            }
+
+        attributes = state.attributes
+        available = state.state not in ("unknown", "unavailable")
+        units = getattr(self.hass.config, "units", None)
+        temperature_unit = attributes.get("temperature_unit") or getattr(units, "temperature_unit", "")
+        return {
+            "available": available,
+            "entityId": entity_id,
+            "name": attributes.get("friendly_name") or entity_id,
+            "condition": state.state if available else "",
+            "temperature": attributes.get("temperature"),
+            "temperatureUnit": str(temperature_unit or ""),
+            "humidity": attributes.get("humidity"),
+            "windSpeed": attributes.get("wind_speed"),
+            "windSpeedUnit": str(attributes.get("wind_speed_unit") or ""),
+            "updatedAt": now,
+        }
+
+    async def _async_update_weather(self, data: dict[str, Any]) -> None:
+        payload = self._weather_payload(self._weather_entity_id())
+        fingerprint = json.dumps(payload, sort_keys=True, default=str)
+        now = time.monotonic()
+        data["weather"] = payload
+        if fingerprint == self._weather_last_payload and now - self._weather_last_push < WEATHER_RESEND_INTERVAL_SECONDS:
+            return
+
+        try:
+            await self.api.async_update_weather(payload)
+        except DigitalFrameError as err:
+            data["weatherSyncError"] = str(err)
+            return
+
+        self._weather_last_payload = fingerprint
+        self._weather_last_push = now
 
     async def async_call_and_refresh(self, call) -> None:
         await call

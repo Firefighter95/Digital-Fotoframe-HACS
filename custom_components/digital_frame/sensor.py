@@ -5,13 +5,14 @@ from typing import Any
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfInformation, UnitOfTime
+from homeassistant.const import PERCENTAGE, UnitOfInformation
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
+from .formatting import format_duration, format_timestamp
 
 
 def _config(data: dict[str, Any]) -> dict[str, Any]:
@@ -118,7 +119,8 @@ def _pc_status_attributes(data: dict[str, Any]) -> dict[str, Any]:
         "platform": system.get("platform"),
         "node_version": system.get("nodeVersion"),
         "port": system.get("port"),
-        "updated_at": system.get("at"),
+        "updated_at": format_timestamp(system.get("at")),
+        "updated_at_raw": system.get("at"),
     }
 
 
@@ -186,6 +188,8 @@ def _latest_photo_attributes(data: dict[str, Any]) -> dict[str, Any]:
         "id": photo.get("id"),
         "name": photo.get("name"),
         "uploaded_by": photo.get("uploadedBy"),
+        "uploaded_at": format_timestamp(photo.get("addedAt")),
+        "uploaded_at_raw": photo.get("addedAt"),
         "favorite": photo.get("favorite"),
         "visible": photo.get("visible"),
     }
@@ -206,13 +210,14 @@ SENSORS: tuple[dict[str, Any], ...] = (
             "id": _display(data).get("currentPhotoId"),
             "index": _display(data).get("currentPhotoIndex"),
             "photo_count": _display(data).get("photoCount"),
-            "last_seen_at": _display(data).get("lastSeenAt"),
+            "last_seen_at": format_timestamp(_display(data).get("lastSeenAt")),
+            "last_seen_at_raw": _display(data).get("lastSeenAt"),
         },
     },
     {
         "key": "latest_upload",
         "name": "Latest upload",
-        "value_fn": lambda data: (_latest_photo(data) or {}).get("addedAt"),
+        "value_fn": lambda data: format_timestamp((_latest_photo(data) or {}).get("addedAt")),
         "icon": "mdi:cloud-upload-outline",
         "attributes_fn": _latest_photo_attributes,
     },
@@ -241,8 +246,11 @@ SENSORS: tuple[dict[str, Any], ...] = (
     {
         "key": "display_last_seen",
         "name": "Display last seen",
-        "value_fn": lambda data: _display(data).get("lastSeenAt"),
+        "value_fn": lambda data: format_timestamp(_display(data).get("lastSeenAt")),
         "icon": "mdi:eye-check-outline",
+        "attributes_fn": lambda data: {
+            "last_seen_at_raw": _display(data).get("lastSeenAt"),
+        },
     },
     {
         "key": "update_status",
@@ -281,10 +289,11 @@ SENSORS: tuple[dict[str, Any], ...] = (
     {
         "key": "pc_uptime",
         "name": "PC uptime",
-        "value_fn": lambda data: _system(data).get("uptimeSeconds"),
-        "unit": UnitOfTime.SECONDS,
+        "value_fn": lambda data: format_duration(_system(data).get("uptimeSeconds")),
         "icon": "mdi:clock-outline",
-        "state_class": SensorStateClass.MEASUREMENT,
+        "attributes_fn": lambda data: {
+            "seconds": _system(data).get("uptimeSeconds"),
+        },
         "requires_system": True,
     },
     {
@@ -329,10 +338,11 @@ SENSORS: tuple[dict[str, Any], ...] = (
     {
         "key": "pc_process_uptime",
         "name": "Frame process uptime",
-        "value_fn": lambda data: _process(data).get("uptimeSeconds"),
-        "unit": UnitOfTime.SECONDS,
+        "value_fn": lambda data: format_duration(_process(data).get("uptimeSeconds")),
         "icon": "mdi:timer-play-outline",
-        "state_class": SensorStateClass.MEASUREMENT,
+        "attributes_fn": lambda data: {
+            "seconds": _process(data).get("uptimeSeconds"),
+        },
         "requires_system": True,
     },
     {

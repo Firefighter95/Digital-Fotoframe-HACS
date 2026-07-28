@@ -22,6 +22,17 @@
       "already_configured": "Deze fotolijst is al ingesteld."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Displayopties",
+        "description": "Kies een Home Assistant weer-entiteit om naast de klok op de fotolijst te tonen.",
+        "data": {
+          "weather_entity": "Weer-entiteit"
+        }
+      }
+    }
+  },
   "entity": {
     "binary_sensor": {
       "display_connected": {

@@ -10,6 +10,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
+from .formatting import format_timestamp
 
 
 async def async_setup_entry(
@@ -53,7 +54,8 @@ class DigitalFrameUpdate(DigitalFrameEntity, UpdateEntity):
     def release_summary(self) -> str | None:
         update = (self.coordinator.data or {}).get("update", {})
         if update.get("status") in ("ready", "failed"):
-            return f"Uploaded by {update.get('uploadedBy') or 'unknown'} at {update.get('uploadedAt') or 'unknown'}."
+            uploaded_at = format_timestamp(update.get("uploadedAt")) or "unknown"
+            return f"Uploaded by {update.get('uploadedBy') or 'unknown'} at {uploaded_at}."
         if update.get("lastError"):
             return str(update["lastError"])[:255]
         return None

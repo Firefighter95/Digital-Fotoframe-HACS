@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.0.1` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.0` or newer.
 
 ## Features
 
@@ -13,6 +13,8 @@ HACS custom integration for the local LAN Digital Frame. It talks directly to th
 - Button entities for reload, fullscreen, next/previous photo, identify, admin QR, apply smart mode, kiosk restart, PC power actions and applying an uploaded update.
 - Binary sensors for display connection, kiosk browser connection, fullscreen and problem state.
 - Sensors for version, mode, screen status, current photo, current URL, update status, latest upload and mini PC health.
+- Uptime sensors are shown as readable durations, and date fields are shown as local date/time strings.
+- Optional weather entity sync: choose a `weather.*` entity in the integration options and the frame shows temperature, condition, humidity and wind next to the clock.
 - Status image entity with a lightweight current-view summary.
 - Text entities for sending a quick message and editing smart day-mode start times.
 - Services to show mode-list items, send priority messages, URLs, save/show/delete pages, show the admin QR, apply smart mode, reload/fullscreen the display, control photos, restart the kiosk browser, apply an uploaded update, restart/shutdown the mini PC and turn the screen on/off.
@@ -45,6 +47,7 @@ info.md
    - Port: `8787`
    - PIN: the admin PIN of the photo frame
    - Actor: `Home Assistant`
+11. Optional: open the integration options/Configure screen and choose a `weather.*` entity. The integration pushes that weather data to the frame every time it changes.
 
 When publishing, update `documentation` and `issue_tracker` in `custom_components/digital_frame/manifest.json` to your own repository.
 
@@ -78,6 +81,7 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 - Smart start text entities: edit the `HH:MM` start time for morning, day, evening and night slots.
 - Sensors for version, mode, screen status, photo count, active page, current photo, current URL, browser status, update status, latest upload, smart slot, self-healing last action and last error.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
+- Weather entity option: not a separate Home Assistant entity; it is selected in the integration options and synced to the photo frame clock.
 - Events: `digital_frame_mode_changed`, `digital_frame_photo_changed`, `digital_frame_update_status_changed` and `digital_frame_problem_changed`.
 - Diagnostics: Home Assistant can download redacted integration diagnostics from the device/integration page.
 

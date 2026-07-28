@@ -12,6 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
+from .formatting import format_timestamp
 
 
 async def async_setup_entry(
@@ -60,7 +61,7 @@ class DigitalFrameStatusImage(DigitalFrameEntity, ImageEntity):
         fullscreen = "yes" if browser.get("fullscreen") or display.get("fullscreen") else "no"
         connected = "online" if display.get("connected") else "unknown"
         url = browser.get("activeUrl") or data.get("browser", {}).get("lastUrl") or ""
-        last_seen = display.get("lastSeenAt") or ""
+        last_seen = format_timestamp(display.get("lastSeenAt")) or ""
 
         svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
   <rect width="1280" height="720" fill="#111310"/>

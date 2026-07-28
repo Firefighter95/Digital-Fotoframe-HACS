@@ -21,5 +21,16 @@
     "abort": {
       "already_configured": "This photo frame is already configured."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Display options",
+        "description": "Choose a Home Assistant weather entity to show next to the clock on the photo frame.",
+        "data": {
+          "weather_entity": "Weather entity"
+        }
+      }
+    }
   }
 }

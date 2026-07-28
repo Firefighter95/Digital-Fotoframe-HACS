@@ -105,6 +105,9 @@ class DigitalFrameApi:
     async def async_apply_update(self) -> dict[str, Any]:
         return await self._request("POST", "/api/apply-update", json={})
 
+    async def async_update_weather(self, weather: dict[str, Any]) -> dict[str, Any]:
+        return await self._request("POST", "/api/weather", json={"weather": weather})
+
     async def async_show_message(
         self,
         title: str,

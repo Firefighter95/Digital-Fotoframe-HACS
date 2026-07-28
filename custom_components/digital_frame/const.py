@@ -10,6 +10,7 @@ DEFAULT_ACTOR = "Home Assistant"
 
 CONF_ACTOR = "actor"
 CONF_PIN = "pin"
+CONF_WEATHER_ENTITY = "weather_entity"
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
