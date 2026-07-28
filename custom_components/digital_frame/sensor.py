@@ -67,6 +67,11 @@ def _update(data: dict[str, Any]) -> dict[str, Any]:
     return update if isinstance(update, dict) else {}
 
 
+def _smart(data: dict[str, Any]) -> dict[str, Any]:
+    smart = data.get("smart")
+    return smart if isinstance(smart, dict) else {}
+
+
 def _first_drive(data: dict[str, Any]) -> dict[str, Any]:
     disk = _system(data).get("disk")
     drives = disk.get("drives") if isinstance(disk, dict) else []
@@ -160,6 +165,7 @@ def _last_error(data: dict[str, Any]) -> str:
         data.get("browser", {}).get("lastError"),
         _browser(data).get("lastError"),
         _update(data).get("lastError"),
+        _smart(data).get("lastProblem"),
         data.get("systemInfoError"),
     ):
         if value:
@@ -250,6 +256,20 @@ SENSORS: tuple[dict[str, Any], ...] = (
         "name": "Last error",
         "value_fn": _last_error,
         "icon": "mdi:alert-circle-outline",
+    },
+    {
+        "key": "smart_slot",
+        "name": "Smart slot",
+        "value_fn": lambda data: _smart(data).get("lastSlot"),
+        "icon": "mdi:sun-clock-outline",
+        "attributes_fn": lambda data: _smart(data),
+    },
+    {
+        "key": "self_healing_last_action",
+        "name": "Self-healing last action",
+        "value_fn": lambda data: _smart(data).get("lastSelfHealAction"),
+        "icon": "mdi:auto-fix",
+        "attributes_fn": lambda data: _smart(data),
     },
     {
         "key": "pc_status",

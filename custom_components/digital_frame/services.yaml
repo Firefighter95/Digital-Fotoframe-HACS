@@ -36,6 +36,16 @@ show_message:
       example: "#d5a849"
       selector:
         text:
+    priority:
+      name: Priority
+      default: normal
+      selector:
+        select:
+          options:
+            - low
+            - normal
+            - high
+            - critical
 
 send_message:
   name: Send message
@@ -75,6 +85,16 @@ send_message:
       example: "#d5a849"
       selector:
         text:
+    priority:
+      name: Priority
+      default: normal
+      selector:
+        select:
+          options:
+            - low
+            - normal
+            - high
+            - critical
 
 show_url:
   name: Show URL
@@ -205,6 +225,20 @@ previous_photo:
 identify:
   name: Identify
   description: Show a short identification message on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+
+show_admin_qr:
+  name: Show admin QR
+  description: Temporarily show a QR code that opens the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+
+apply_smart_mode:
+  name: Apply smart mode
+  description: Apply the current smart-day schedule slot immediately.
   fields:
     entry_id:
       name: Config entry

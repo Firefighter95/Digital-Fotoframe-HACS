@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CLOCK_POSITION_OPTIONS, DOMAIN, F1_PROVIDER_OPTIONS, MODE_OPTIONS, PHOTO_FIT_OPTIONS, PHOTO_SOURCE_OPTIONS
+from .const import CLOCK_POSITION_OPTIONS, DOMAIN, F1_PROVIDER_OPTIONS, MODE_OPTIONS, PHOTO_FIT_OPTIONS, PHOTO_SOURCE_OPTIONS, SMART_MODE_OPTIONS
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
 
@@ -26,6 +26,10 @@ CONFIG_SELECTS: tuple[DigitalFrameConfigSelectDescription, ...] = (
     DigitalFrameConfigSelectDescription("clock_position_select", "Clock position", "clockPosition", CLOCK_POSITION_OPTIONS, "mdi:clock-edit-outline"),
     DigitalFrameConfigSelectDescription("photo_fit_select", "Photo fit", "photoFit", PHOTO_FIT_OPTIONS, "mdi:fit-to-screen-outline"),
     DigitalFrameConfigSelectDescription("f1_provider_select", "F1 provider", "f1Provider", F1_PROVIDER_OPTIONS, "mdi:flag-checkered"),
+    DigitalFrameConfigSelectDescription("smart_morning_mode_select", "Smart morning mode", "smartMorningMode", SMART_MODE_OPTIONS, "mdi:weather-sunset-up"),
+    DigitalFrameConfigSelectDescription("smart_day_mode_select", "Smart day mode target", "smartDayMode", SMART_MODE_OPTIONS, "mdi:white-balance-sunny"),
+    DigitalFrameConfigSelectDescription("smart_evening_mode_select", "Smart evening mode", "smartEveningMode", SMART_MODE_OPTIONS, "mdi:weather-sunset-down"),
+    DigitalFrameConfigSelectDescription("smart_night_mode_select", "Smart night mode", "smartNightMode", SMART_MODE_OPTIONS, "mdi:weather-night"),
 )
 
 

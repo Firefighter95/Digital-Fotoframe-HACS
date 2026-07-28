@@ -44,6 +44,8 @@ SERVICE_PREVIOUS_PHOTO = "previous_photo"
 SERVICE_IDENTIFY = "identify"
 SERVICE_RESTART_KIOSK = "restart_kiosk"
 SERVICE_APPLY_UPDATE = "apply_update"
+SERVICE_SHOW_ADMIN_QR = "show_admin_qr"
+SERVICE_APPLY_SMART_MODE = "apply_smart_mode"
 
 ENTRY_FIELD = {vol.Optional("entry_id"): cv.string}
 
@@ -54,6 +56,7 @@ SHOW_MESSAGE_SCHEMA = vol.Schema(
         vol.Required("message"): cv.string,
         vol.Optional("duration", default=60): vol.All(vol.Coerce(int), vol.Range(min=0, max=86400)),
         vol.Optional("accent", default="#d5a849"): cv.string,
+        vol.Optional("priority", default="normal"): vol.In(["low", "normal", "high", "critical"]),
     }
 )
 SHOW_URL_SCHEMA = vol.Schema({**ENTRY_FIELD, vol.Required("url"): cv.url})
@@ -139,6 +142,7 @@ def _async_register_services(hass: HomeAssistant) -> None:
                 call.data["message"],
                 call.data["duration"],
                 call.data["accent"],
+                call.data["priority"],
             ),
         )
 
@@ -207,6 +211,12 @@ def _async_register_services(hass: HomeAssistant) -> None:
     async def apply_update(call: ServiceCall) -> None:
         await _run_frame_call(hass, call, lambda api: api.async_apply_update())
 
+    async def show_admin_qr(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("show_admin_qr"))
+
+    async def apply_smart_mode(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("apply_smart_mode"))
+
     def register_once(service: str, handler: Callable[[ServiceCall], Awaitable[None]], schema: vol.Schema) -> None:
         if not hass.services.has_service(DOMAIN, service):
             hass.services.async_register(DOMAIN, service, handler, schema=schema)
@@ -231,3 +241,5 @@ def _async_register_services(hass: HomeAssistant) -> None:
     register_once(SERVICE_IDENTIFY, identify, ENTRY_ONLY_SCHEMA)
     register_once(SERVICE_RESTART_KIOSK, restart_kiosk, ENTRY_ONLY_SCHEMA)
     register_once(SERVICE_APPLY_UPDATE, apply_update, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_SHOW_ADMIN_QR, show_admin_qr, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_APPLY_SMART_MODE, apply_smart_mode, ENTRY_ONLY_SCHEMA)

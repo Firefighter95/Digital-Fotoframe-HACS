@@ -38,6 +38,7 @@ def _has_problem(data: dict[str, Any]) -> bool:
             data.get("browser", {}).get("lastError"),
             _browser(data).get("lastError"),
             data.get("update", {}).get("lastError"),
+            data.get("smart", {}).get("lastProblem"),
             data.get("systemInfoError"),
         )
     )

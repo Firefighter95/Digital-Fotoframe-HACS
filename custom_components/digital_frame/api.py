@@ -111,6 +111,7 @@ class DigitalFrameApi:
         message: str,
         duration: int = 60,
         accent: str = "#d5a849",
+        priority: str = "normal",
     ) -> dict[str, Any]:
         return await self._request(
             "POST",
@@ -122,6 +123,7 @@ class DigitalFrameApi:
                     "title": title,
                     "body": message,
                     "accent": accent,
+                    "priority": priority,
                 },
             },
         )

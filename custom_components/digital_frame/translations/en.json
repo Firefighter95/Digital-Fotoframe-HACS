@@ -53,6 +53,12 @@
       "identify": {
         "name": "Identify"
       },
+      "show_admin_qr": {
+        "name": "Show admin QR"
+      },
+      "apply_smart_mode": {
+        "name": "Apply smart mode"
+      },
       "restart_kiosk": {
         "name": "Restart kiosk browser"
       },
@@ -91,6 +97,9 @@
       },
       "clock_backdrop_opacity": {
         "name": "Clock backdrop opacity"
+      },
+      "page_fallback_seconds": {
+        "name": "Page fallback seconds"
       }
     },
     "select": {
@@ -102,6 +111,18 @@
       },
       "f1_provider_select": {
         "name": "F1 provider"
+      },
+      "smart_morning_mode_select": {
+        "name": "Smart morning mode"
+      },
+      "smart_day_mode_select": {
+        "name": "Smart day mode target"
+      },
+      "smart_evening_mode_select": {
+        "name": "Smart evening mode"
+      },
+      "smart_night_mode_select": {
+        "name": "Smart night mode"
       }
     },
     "switch": {
@@ -116,11 +137,41 @@
       },
       "favorites_only": {
         "name": "Favorites only"
+      },
+      "adaptive_readability": {
+        "name": "Adaptive readability"
+      },
+      "burn_in_protection": {
+        "name": "Burn-in protection"
+      },
+      "smooth_transitions": {
+        "name": "Smooth transitions"
+      },
+      "smart_day_mode": {
+        "name": "Smart day mode"
+      },
+      "self_healing": {
+        "name": "Kiosk self-healing"
+      },
+      "page_error_fallback": {
+        "name": "Page error fallback"
       }
     },
     "text": {
       "message_text": {
         "name": "Send message"
+      },
+      "smart_morning_start": {
+        "name": "Smart morning start"
+      },
+      "smart_day_start": {
+        "name": "Smart day start"
+      },
+      "smart_evening_start": {
+        "name": "Smart evening start"
+      },
+      "smart_night_start": {
+        "name": "Smart night start"
       }
     },
     "update": {

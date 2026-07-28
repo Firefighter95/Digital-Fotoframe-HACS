@@ -34,6 +34,7 @@ def _has_problem(data: dict[str, Any]) -> bool:
             _nested(data, "browser", "lastError"),
             _nested(data, "systemInfo", "browser", "lastError"),
             _nested(data, "update", "lastError"),
+            _nested(data, "smart", "lastProblem"),
             data.get("systemInfoError"),
         )
     )

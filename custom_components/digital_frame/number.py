@@ -32,6 +32,7 @@ NUMBERS: tuple[DigitalFrameNumberDescription, ...] = (
     DigitalFrameNumberDescription("photo_overlay", "Photo dark overlay", "photoOverlay", 0, 85, 1, PERCENTAGE, "mdi:brightness-4"),
     DigitalFrameNumberDescription("clock_size", "Clock size", "clockSize", 70, 160, 1, PERCENTAGE, "mdi:format-size"),
     DigitalFrameNumberDescription("clock_backdrop_opacity", "Clock backdrop opacity", "clockBackdropOpacity", 0, 95, 1, PERCENTAGE, "mdi:opacity"),
+    DigitalFrameNumberDescription("page_fallback_seconds", "Page fallback seconds", "pageFallbackSeconds", 5, 300, 5, UnitOfTime.SECONDS, "mdi:timer-alert-outline", "box"),
 )
 
 

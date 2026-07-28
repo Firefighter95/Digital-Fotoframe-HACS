@@ -45,6 +45,12 @@
     "identify": {
       "service": "mdi:crosshairs-gps"
     },
+    "show_admin_qr": {
+      "service": "mdi:qrcode"
+    },
+    "apply_smart_mode": {
+      "service": "mdi:calendar-sync"
+    },
     "restart_kiosk": {
       "service": "mdi:web-refresh"
     },

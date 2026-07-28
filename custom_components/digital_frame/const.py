@@ -31,6 +31,17 @@ MODE_OPTIONS = {
     "message": "Message",
     "iframe": "Web page",
     "blank": "Blank screen",
+    "qr": "Admin QR",
+}
+
+SMART_MODE_OPTIONS = {
+    "slideshow": "Photos",
+    "dashboard": "Meters",
+    "iframe": "Web page",
+    "f1": "F1 map",
+    "message": "Message",
+    "qr": "Admin QR",
+    "blank": "Blank screen",
 }
 
 PHOTO_SOURCE_OPTIONS = {

@@ -41,6 +41,7 @@ class DigitalFrameNotify(DigitalFrameEntity, NotifyEntity):
                 message,
                 int(data.get("duration", DEFAULT_NOTIFY_DURATION)),
                 str(data.get("accent", DEFAULT_NOTIFY_ACCENT)),
+                str(data.get("priority", "normal")),
             )
         )
         self._async_record_notification()

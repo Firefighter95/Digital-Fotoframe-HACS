@@ -58,6 +58,18 @@ BUTTONS: tuple[DigitalFrameButtonDescription, ...] = (
         device_class=ButtonDeviceClass.IDENTIFY,
     ),
     DigitalFrameButtonDescription(
+        "show_admin_qr",
+        "Show admin QR",
+        "mdi:qrcode",
+        lambda api: api.async_display_control("show_admin_qr"),
+    ),
+    DigitalFrameButtonDescription(
+        "apply_smart_mode",
+        "Apply smart mode",
+        "mdi:calendar-sync",
+        lambda api: api.async_display_control("apply_smart_mode"),
+    ),
+    DigitalFrameButtonDescription(
         "restart_kiosk",
         "Restart kiosk browser",
         "mdi:web-refresh",
