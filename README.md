@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.3` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.4` or newer.
 
 ## Features
 
