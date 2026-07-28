@@ -23,9 +23,109 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "display_connected": {
+        "name": "Display verbonden"
+      },
+      "kiosk_browser_connected": {
+        "name": "Kioskbrowser verbonden"
+      },
+      "browser_fullscreen": {
+        "name": "Browser fullscreen"
+      },
+      "problem": {
+        "name": "Probleem"
+      }
+    },
+    "button": {
+      "reload_display": {
+        "name": "Display herladen"
+      },
+      "force_fullscreen": {
+        "name": "Fullscreen forceren"
+      },
+      "next_photo": {
+        "name": "Volgende foto"
+      },
+      "previous_photo": {
+        "name": "Vorige foto"
+      },
+      "identify": {
+        "name": "Identificeer"
+      },
+      "restart_kiosk": {
+        "name": "Kioskbrowser herstarten"
+      },
+      "restart_pc": {
+        "name": "PC herstarten"
+      },
+      "shutdown_pc": {
+        "name": "PC afsluiten"
+      },
+      "cancel_shutdown": {
+        "name": "Afsluiten annuleren"
+      },
+      "apply_update": {
+        "name": "Update toepassen"
+      }
+    },
+    "image": {
+      "status_image": {
+        "name": "Statusbeeld"
+      }
+    },
+    "notify": {
+      "notify": {
+        "name": "Notificatie"
+      }
+    },
+    "number": {
+      "slide_seconds": {
+        "name": "Slideshow-interval"
+      },
+      "photo_overlay": {
+        "name": "Donkere foto-overlay"
+      },
+      "clock_size": {
+        "name": "Klokgrootte"
+      },
+      "clock_backdrop_opacity": {
+        "name": "Klokachtergrond sterkte"
+      }
+    },
+    "select": {
+      "clock_position_select": {
+        "name": "Klokpositie"
+      },
+      "photo_fit_select": {
+        "name": "Fotopassing"
+      },
+      "f1_provider_select": {
+        "name": "F1-bron"
+      }
+    },
+    "switch": {
+      "clock_enabled": {
+        "name": "Klok"
+      },
+      "shuffle": {
+        "name": "Foto's schudden"
+      },
+      "clock_backdrop": {
+        "name": "Klokachtergrond"
+      },
+      "favorites_only": {
+        "name": "Alleen favorieten"
+      }
+    },
     "text": {
       "message_text": {
         "name": "Bericht sturen"
+      }
+    },
+    "update": {
+      "software_update": {
+        "name": "Software-update"
       }
     }
   }

@@ -11,7 +11,18 @@ DEFAULT_ACTOR = "Home Assistant"
 CONF_ACTOR = "actor"
 CONF_PIN = "pin"
 
-PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.SELECT, Platform.TEXT]
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.IMAGE,
+    Platform.NOTIFY,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+    Platform.TEXT,
+    Platform.UPDATE,
+]
 
 MODE_OPTIONS = {
     "slideshow": "Photos",
@@ -25,4 +36,21 @@ MODE_OPTIONS = {
 PHOTO_SOURCE_OPTIONS = {
     "all": "All visible photos",
     "favorites": "Favorites only",
+}
+
+CLOCK_POSITION_OPTIONS = {
+    "top-right": "Top right",
+    "top-left": "Top left",
+    "bottom-right": "Bottom right",
+    "bottom-left": "Bottom left",
+}
+
+PHOTO_FIT_OPTIONS = {
+    "cover": "Fill screen",
+    "contain": "Fit entire photo",
+}
+
+F1_PROVIDER_OPTIONS = {
+    "openf1": "OpenF1 live",
+    "off": "Off",
 }

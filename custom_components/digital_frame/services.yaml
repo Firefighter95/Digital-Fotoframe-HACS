@@ -160,6 +160,69 @@ restart_pc:
     entry_id:
       name: Config entry
 
+shutdown_pc:
+  name: Shut down PC
+  description: Shut down the Windows mini PC after the photo frame server schedules a 10 second shutdown.
+  fields:
+    entry_id:
+      name: Config entry
+
+cancel_shutdown:
+  name: Cancel shutdown
+  description: Cancel a scheduled Windows restart or shutdown.
+  fields:
+    entry_id:
+      name: Config entry
+
+reload_display:
+  name: Reload display
+  description: Reload the active kiosk page.
+  fields:
+    entry_id:
+      name: Config entry
+
+force_fullscreen:
+  name: Force fullscreen
+  description: Ask the kiosk browser to return to fullscreen and hide browser/window bars.
+  fields:
+    entry_id:
+      name: Config entry
+
+next_photo:
+  name: Next photo
+  description: Switch the slideshow to the next photo.
+  fields:
+    entry_id:
+      name: Config entry
+
+previous_photo:
+  name: Previous photo
+  description: Switch the slideshow to the previous photo.
+  fields:
+    entry_id:
+      name: Config entry
+
+identify:
+  name: Identify
+  description: Show a short identification message on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+
+restart_kiosk:
+  name: Restart kiosk browser
+  description: Restart only the kiosk browser profile and reopen the current display URL.
+  fields:
+    entry_id:
+      name: Config entry
+
+apply_update:
+  name: Apply uploaded update
+  description: Apply the update package that was already uploaded through the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+
 show_mode:
   name: Show mode
   description: Switch to a built-in photo frame mode.

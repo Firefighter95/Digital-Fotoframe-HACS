@@ -33,6 +33,11 @@ class DigitalFrameMessageText(DigitalFrameEntity, TextEntity):
         self._native_value = ""
 
     @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "display" in permissions and super().available
+
+    @property
     def mode(self) -> str:
         return "text"
 

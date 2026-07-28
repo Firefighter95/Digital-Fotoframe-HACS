@@ -23,9 +23,109 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "display_connected": {
+        "name": "Display connected"
+      },
+      "kiosk_browser_connected": {
+        "name": "Kiosk browser connected"
+      },
+      "browser_fullscreen": {
+        "name": "Browser fullscreen"
+      },
+      "problem": {
+        "name": "Problem"
+      }
+    },
+    "button": {
+      "reload_display": {
+        "name": "Reload display"
+      },
+      "force_fullscreen": {
+        "name": "Force fullscreen"
+      },
+      "next_photo": {
+        "name": "Next photo"
+      },
+      "previous_photo": {
+        "name": "Previous photo"
+      },
+      "identify": {
+        "name": "Identify"
+      },
+      "restart_kiosk": {
+        "name": "Restart kiosk browser"
+      },
+      "restart_pc": {
+        "name": "Restart PC"
+      },
+      "shutdown_pc": {
+        "name": "Shut down PC"
+      },
+      "cancel_shutdown": {
+        "name": "Cancel shutdown"
+      },
+      "apply_update": {
+        "name": "Apply update"
+      }
+    },
+    "image": {
+      "status_image": {
+        "name": "Status image"
+      }
+    },
+    "notify": {
+      "notify": {
+        "name": "Notify"
+      }
+    },
+    "number": {
+      "slide_seconds": {
+        "name": "Slideshow interval"
+      },
+      "photo_overlay": {
+        "name": "Photo dark overlay"
+      },
+      "clock_size": {
+        "name": "Clock size"
+      },
+      "clock_backdrop_opacity": {
+        "name": "Clock backdrop opacity"
+      }
+    },
+    "select": {
+      "clock_position_select": {
+        "name": "Clock position"
+      },
+      "photo_fit_select": {
+        "name": "Photo fit"
+      },
+      "f1_provider_select": {
+        "name": "F1 provider"
+      }
+    },
+    "switch": {
+      "clock_enabled": {
+        "name": "Clock"
+      },
+      "shuffle": {
+        "name": "Shuffle photos"
+      },
+      "clock_backdrop": {
+        "name": "Clock backdrop"
+      },
+      "favorites_only": {
+        "name": "Favorites only"
+      }
+    },
     "text": {
       "message_text": {
         "name": "Send message"
+      }
+    },
+    "update": {
+      "software_update": {
+        "name": "Software update"
       }
     }
   }

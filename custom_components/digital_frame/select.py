@@ -1,14 +1,32 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, MODE_OPTIONS, PHOTO_SOURCE_OPTIONS
+from .const import CLOCK_POSITION_OPTIONS, DOMAIN, F1_PROVIDER_OPTIONS, MODE_OPTIONS, PHOTO_FIT_OPTIONS, PHOTO_SOURCE_OPTIONS
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
+
+
+@dataclass(frozen=True)
+class DigitalFrameConfigSelectDescription:
+    key: str
+    name: str
+    config_key: str
+    options: dict[str, str]
+    icon: str
+
+
+CONFIG_SELECTS: tuple[DigitalFrameConfigSelectDescription, ...] = (
+    DigitalFrameConfigSelectDescription("clock_position_select", "Clock position", "clockPosition", CLOCK_POSITION_OPTIONS, "mdi:clock-edit-outline"),
+    DigitalFrameConfigSelectDescription("photo_fit_select", "Photo fit", "photoFit", PHOTO_FIT_OPTIONS, "mdi:fit-to-screen-outline"),
+    DigitalFrameConfigSelectDescription("f1_provider_select", "F1 provider", "f1Provider", F1_PROVIDER_OPTIONS, "mdi:flag-checkered"),
+)
 
 
 async def async_setup_entry(
@@ -23,6 +41,7 @@ async def async_setup_entry(
             DigitalFrameModeItemSelect(coordinator),
             DigitalFramePhotoSourceSelect(coordinator),
             DigitalFramePageSelect(coordinator),
+            *[DigitalFrameConfigSelect(coordinator, description) for description in CONFIG_SELECTS],
         ]
     )
 
@@ -30,6 +49,11 @@ async def async_setup_entry(
 class DigitalFrameModeSelect(DigitalFrameEntity, SelectEntity):
     def __init__(self, coordinator: DigitalFrameCoordinator) -> None:
         super().__init__(coordinator, "mode_select", "Mode")
+
+    @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "display" in permissions and super().available
 
     @property
     def options(self) -> list[str]:
@@ -50,6 +74,11 @@ class DigitalFramePhotoSourceSelect(DigitalFrameEntity, SelectEntity):
         super().__init__(coordinator, "photo_source_select", "Photo selection")
 
     @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "settings" in permissions and super().available
+
+    @property
     def options(self) -> list[str]:
         return list(PHOTO_SOURCE_OPTIONS.values())
 
@@ -66,6 +95,11 @@ class DigitalFramePhotoSourceSelect(DigitalFrameEntity, SelectEntity):
 class DigitalFrameModeItemSelect(DigitalFrameEntity, SelectEntity):
     def __init__(self, coordinator: DigitalFrameCoordinator) -> None:
         super().__init__(coordinator, "mode_item_select", "Mode list")
+
+    @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "display" in permissions and super().available
 
     @property
     def options(self) -> list[str]:
@@ -110,6 +144,11 @@ class DigitalFramePageSelect(DigitalFrameEntity, SelectEntity):
         super().__init__(coordinator, "page_select", "Page")
 
     @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "display" in permissions and super().available
+
+    @property
     def options(self) -> list[str]:
         options, _ = self._page_options()
         return options
@@ -143,6 +182,33 @@ class DigitalFramePageSelect(DigitalFrameEntity, SelectEntity):
             options.append(label)
             by_id[page_id] = label
         return options, by_id
+
+
+class DigitalFrameConfigSelect(DigitalFrameEntity, SelectEntity):
+    def __init__(self, coordinator: DigitalFrameCoordinator, description: DigitalFrameConfigSelectDescription) -> None:
+        super().__init__(coordinator, description.key, description.name)
+        self.entity_description = description
+        self._attr_icon = description.icon
+
+    @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "settings" in permissions and super().available
+
+    @property
+    def options(self) -> list[str]:
+        return list(self.entity_description.options.values())
+
+    @property
+    def current_option(self) -> str | None:
+        value = (self.coordinator.data or {}).get("config", {}).get(self.entity_description.config_key)
+        return self.entity_description.options.get(value)
+
+    async def async_select_option(self, option: str) -> None:
+        value = _key_for_label(self.entity_description.options, option)
+        await self.coordinator.async_call_and_refresh(
+            self.coordinator.api.async_update_config(**{self.entity_description.config_key: value})
+        )
 
 
 def _key_for_label(options: dict[str, str], label: str) -> str:

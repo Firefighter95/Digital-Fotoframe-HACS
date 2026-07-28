@@ -52,6 +52,21 @@ def _process_memory(data: dict[str, Any]) -> dict[str, Any]:
     return memory if isinstance(memory, dict) else {}
 
 
+def _browser(data: dict[str, Any]) -> dict[str, Any]:
+    browser = _system(data).get("browser")
+    return browser if isinstance(browser, dict) else {}
+
+
+def _display(data: dict[str, Any]) -> dict[str, Any]:
+    display = data.get("display")
+    return display if isinstance(display, dict) else {}
+
+
+def _update(data: dict[str, Any]) -> dict[str, Any]:
+    update = data.get("update")
+    return update if isinstance(update, dict) else {}
+
+
 def _first_drive(data: dict[str, Any]) -> dict[str, Any]:
     disk = _system(data).get("disk")
     drives = disk.get("drives") if isinstance(disk, dict) else []
@@ -138,12 +153,104 @@ def _network_attributes(data: dict[str, Any]) -> dict[str, Any]:
     return {"addresses": _network_addresses(data)}
 
 
+def _last_error(data: dict[str, Any]) -> str:
+    for value in (
+        _display(data).get("lastControlError"),
+        data.get("screen", {}).get("lastError"),
+        data.get("browser", {}).get("lastError"),
+        _browser(data).get("lastError"),
+        _update(data).get("lastError"),
+        data.get("systemInfoError"),
+    ):
+        if value:
+            return str(value)
+    return ""
+
+
+def _latest_photo(data: dict[str, Any]) -> dict[str, Any] | None:
+    photos = data.get("photos", [])
+    if not isinstance(photos, list) or not photos:
+        return None
+    return max((photo for photo in photos if isinstance(photo, dict)), key=lambda photo: photo.get("addedAt") or "", default=None)
+
+
+def _latest_photo_attributes(data: dict[str, Any]) -> dict[str, Any]:
+    photo = _latest_photo(data) or {}
+    return {
+        "id": photo.get("id"),
+        "name": photo.get("name"),
+        "uploaded_by": photo.get("uploadedBy"),
+        "favorite": photo.get("favorite"),
+        "visible": photo.get("visible"),
+    }
+
+
 SENSORS: tuple[dict[str, Any], ...] = (
     {"key": "app_version", "name": "Version", "value_fn": lambda data: data.get("server", {}).get("appVersion")},
     {"key": "mode", "name": "Mode", "value_fn": lambda data: _config(data).get("mode")},
     {"key": "screen", "name": "Screen", "value_fn": _screen},
     {"key": "photo_count", "name": "Photos", "value_fn": lambda data: len(data.get("photos", []))},
     {"key": "active_page", "name": "Active page", "value_fn": _active_page},
+    {
+        "key": "current_photo",
+        "name": "Current photo",
+        "value_fn": lambda data: _display(data).get("currentPhotoName") or _display(data).get("currentPhotoId") or "",
+        "icon": "mdi:image",
+        "attributes_fn": lambda data: {
+            "id": _display(data).get("currentPhotoId"),
+            "index": _display(data).get("currentPhotoIndex"),
+            "photo_count": _display(data).get("photoCount"),
+            "last_seen_at": _display(data).get("lastSeenAt"),
+        },
+    },
+    {
+        "key": "latest_upload",
+        "name": "Latest upload",
+        "value_fn": lambda data: (_latest_photo(data) or {}).get("addedAt"),
+        "icon": "mdi:cloud-upload-outline",
+        "attributes_fn": _latest_photo_attributes,
+    },
+    {
+        "key": "current_url",
+        "name": "Current URL",
+        "value_fn": lambda data: _browser(data).get("activeUrl") or data.get("browser", {}).get("lastUrl") or _active_page(data),
+        "icon": "mdi:web",
+        "requires_system": True,
+    },
+    {
+        "key": "browser_status",
+        "name": "Kiosk browser",
+        "value_fn": lambda data: "online" if _browser(data).get("devtoolsAvailable") else "unknown",
+        "icon": "mdi:monitor-dashboard",
+        "attributes_fn": lambda data: _browser(data),
+        "requires_system": True,
+    },
+    {
+        "key": "browser_window_state",
+        "name": "Browser window state",
+        "value_fn": lambda data: _browser(data).get("windowState") or "",
+        "icon": "mdi:fullscreen",
+        "requires_system": True,
+    },
+    {
+        "key": "display_last_seen",
+        "name": "Display last seen",
+        "value_fn": lambda data: _display(data).get("lastSeenAt"),
+        "icon": "mdi:eye-check-outline",
+    },
+    {
+        "key": "update_status",
+        "name": "Update status",
+        "value_fn": lambda data: _update(data).get("status"),
+        "icon": "mdi:update",
+        "attributes_fn": lambda data: _update(data),
+    },
+    {
+        "key": "last_error",
+        "name": "Last error",
+        "value_fn": _last_error,
+        "icon": "mdi:alert-circle-outline",
+    },
     {
         "key": "pc_status",
         "name": "PC status",
@@ -196,6 +303,15 @@ SENSORS: tuple[dict[str, Any], ...] = (
         "value_fn": lambda data: _process_memory(data).get("rss"),
         "unit": UnitOfInformation.BYTES,
         "icon": "mdi:application-cog",
+        "state_class": SensorStateClass.MEASUREMENT,
+        "requires_system": True,
+    },
+    {
+        "key": "pc_process_uptime",
+        "name": "Frame process uptime",
+        "value_fn": lambda data: _process(data).get("uptimeSeconds"),
+        "unit": UnitOfTime.SECONDS,
+        "icon": "mdi:timer-play-outline",
         "state_class": SensorStateClass.MEASUREMENT,
         "requires_system": True,
     },

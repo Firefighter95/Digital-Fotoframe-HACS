@@ -69,8 +69,11 @@ class DigitalFrameApi:
     async def async_set_mode(self, mode: str) -> dict[str, Any]:
         return await self._request("POST", "/api/command", json={"mode": mode})
 
+    async def async_update_config(self, **config: Any) -> dict[str, Any]:
+        return await self._request("POST", "/api/config", json=config)
+
     async def async_set_photo_source(self, source: str) -> dict[str, Any]:
-        return await self._request("POST", "/api/config", json={"photoSource": source})
+        return await self.async_update_config(photoSource=source)
 
     async def async_show_url(self, url: str) -> dict[str, Any]:
         return await self._request("POST", "/api/command", json={"mode": "iframe", "iframe": {"url": url}})
@@ -95,6 +98,12 @@ class DigitalFrameApi:
 
     async def async_system_power(self, action: str) -> dict[str, Any]:
         return await self._request("POST", "/api/system/power", json={"action": action})
+
+    async def async_display_control(self, action: str) -> dict[str, Any]:
+        return await self._request("POST", "/api/display/control", json={"action": action})
+
+    async def async_apply_update(self) -> dict[str, Any]:
+        return await self._request("POST", "/api/apply-update", json={})
 
     async def async_show_message(
         self,

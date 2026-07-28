@@ -35,6 +35,15 @@ SERVICE_SCREEN_OFF = "screen_off"
 SERVICE_SHOW_MODE = "show_mode"
 SERVICE_SHOW_MODE_ITEM = "show_mode_item"
 SERVICE_RESTART_PC = "restart_pc"
+SERVICE_SHUTDOWN_PC = "shutdown_pc"
+SERVICE_CANCEL_SHUTDOWN = "cancel_shutdown"
+SERVICE_RELOAD_DISPLAY = "reload_display"
+SERVICE_FORCE_FULLSCREEN = "force_fullscreen"
+SERVICE_NEXT_PHOTO = "next_photo"
+SERVICE_PREVIOUS_PHOTO = "previous_photo"
+SERVICE_IDENTIFY = "identify"
+SERVICE_RESTART_KIOSK = "restart_kiosk"
+SERVICE_APPLY_UPDATE = "apply_update"
 
 ENTRY_FIELD = {vol.Optional("entry_id"): cv.string}
 
@@ -61,6 +70,11 @@ SAVE_PAGE_SCHEMA = vol.Schema(
 DELETE_PAGE_SCHEMA = SHOW_PAGE_SCHEMA
 SHOW_MODE_SCHEMA = vol.Schema({**ENTRY_FIELD, vol.Required("mode"): vol.In(list(MODE_OPTIONS))})
 ENTRY_ONLY_SCHEMA = vol.Schema(ENTRY_FIELD)
+
+
+async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
+    _async_register_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -166,6 +180,33 @@ def _async_register_services(hass: HomeAssistant) -> None:
     async def restart_pc(call: ServiceCall) -> None:
         await _run_frame_call(hass, call, lambda api: api.async_system_power("restart"))
 
+    async def shutdown_pc(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_system_power("shutdown"))
+
+    async def cancel_shutdown(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_system_power("cancel"))
+
+    async def reload_display(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("reload"))
+
+    async def force_fullscreen(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("force_fullscreen"))
+
+    async def next_photo(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("next_photo"))
+
+    async def previous_photo(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("previous_photo"))
+
+    async def identify(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("identify"))
+
+    async def restart_kiosk(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_display_control("restart_kiosk"))
+
+    async def apply_update(call: ServiceCall) -> None:
+        await _run_frame_call(hass, call, lambda api: api.async_apply_update())
+
     def register_once(service: str, handler: Callable[[ServiceCall], Awaitable[None]], schema: vol.Schema) -> None:
         if not hass.services.has_service(DOMAIN, service):
             hass.services.async_register(DOMAIN, service, handler, schema=schema)
@@ -181,3 +222,12 @@ def _async_register_services(hass: HomeAssistant) -> None:
     register_once(SERVICE_SCREEN_OFF, screen_off, ENTRY_ONLY_SCHEMA)
     register_once(SERVICE_SHOW_MODE, show_mode, SHOW_MODE_SCHEMA)
     register_once(SERVICE_RESTART_PC, restart_pc, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_SHUTDOWN_PC, shutdown_pc, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_CANCEL_SHUTDOWN, cancel_shutdown, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_RELOAD_DISPLAY, reload_display, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_FORCE_FULLSCREEN, force_fullscreen, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_NEXT_PHOTO, next_photo, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_PREVIOUS_PHOTO, previous_photo, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_IDENTIFY, identify, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_RESTART_KIOSK, restart_kiosk, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_APPLY_UPDATE, apply_update, ENTRY_ONLY_SCHEMA)

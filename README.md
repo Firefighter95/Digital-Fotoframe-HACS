@@ -1,16 +1,23 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. Basic controls expect server `V 1.7.0` or newer; the editable mode-list selector expects server `V 1.10.0` or newer; PC sensors and restart service expect server `V 1.11.0` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. Basic controls expect server `V 1.7.0` or newer; the editable mode-list selector expects server `V 1.10.0` or newer; PC sensors and restart service expect server `V 1.11.0` or newer. The full Home Assistant entity set expects server `V 1.13.0` or newer.
 
 ## Features
 
 - UI configuration through Home Assistant.
 - Device in Devices & services.
-- Screen on/off switch.
-- Selects for mode, editable mode list, photo selection and saved page; the mode list and saved pages refresh every 5 seconds.
-- Sensors for version, mode, screen status, photos, active page and mini PC health.
+- Notify entity for `notify.send_message`.
+- Screen on/off, clock, shuffle, clock backdrop and favorites-only switches.
+- Selects for mode, editable mode list, photo selection, saved page, clock position, photo fit and F1 provider; the mode list and saved pages refresh every 5 seconds.
+- Number entities for slideshow interval, photo dark overlay, clock size and clock backdrop opacity.
+- Button entities for reload, fullscreen, next/previous photo, identify, kiosk restart, PC power actions and applying an uploaded update.
+- Binary sensors for display connection, kiosk browser connection, fullscreen and problem state.
+- Sensors for version, mode, screen status, current photo, current URL, update status, latest upload and mini PC health.
+- Status image entity with a lightweight current-view summary.
 - Text entity for sending a quick message from Home Assistant to the screen.
-- Services to show mode-list items, send messages, URLs, save/show/delete pages, restart the mini PC and turn the screen on/off.
+- Services to show mode-list items, send messages, URLs, save/show/delete pages, reload/fullscreen the display, control photos, restart the kiosk browser, apply an uploaded update, restart/shutdown the mini PC and turn the screen on/off.
+- Home Assistant events for mode changes, photo changes, update status changes and problem changes.
+- Diagnostics export with PIN, host and URL fields redacted.
 
 ## HACS installation
 
@@ -50,18 +57,28 @@ If HACS shows `Repository structure for main is not compliant`, the repository r
 3. Restart Home Assistant.
 4. Add the integration through Settings > Devices & services.
 
-In the frame admin portal, give the name `Home Assistant` at least the `Display control` permission. For PC health sensors and `digital_frame.restart_pc`, also give it `Manage PC`.
+In the frame admin portal, give the name `Home Assistant` at least the `Display control` permission. For configuration entities such as clock/overlay/slideshow settings, give it `Change settings`. For PC health sensors and PC power buttons/services, give it `Manage PC`. For the update entity and apply-update button/service, give it `Manage updates`.
 
 ## Entities
 
 - `switch.*_screen`: screen on/off.
+- Other switches: clock, shuffle, clock backdrop and favorites-only.
 - `select.*_mode`: photos, web page, F1, message, meters or blank screen.
 - `select.*_photo_selection`: all visible photos or favorites only.
 - `select.*_mode_list`: the editable button list from the frame admin portal.
 - `select.*_page`: saved pages from the admin portal.
+- Other selects: clock position, photo fit and F1 provider.
+- Numbers: slideshow interval, photo dark overlay, clock size and clock backdrop opacity.
+- Buttons: reload display, force fullscreen, next/previous photo, identify, restart kiosk browser, PC restart/shutdown/cancel and apply uploaded update.
+- Binary sensors: display connected, kiosk browser connected, browser fullscreen and problem.
+- Update entity: apply an update package after it has been uploaded through the frame admin portal.
+- Image entity: lightweight status image for dashboard cards.
+- Notify entity: use Home Assistant's `notify.send_message` action.
 - `text.*_send_message`: type a message and save it to show it on the frame for 60 seconds.
-- Sensors for version, mode, screen status, photo count and active page.
+- Sensors for version, mode, screen status, photo count, active page, current photo, current URL, browser status, update status, latest upload and last error.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
+- Events: `digital_frame_mode_changed`, `digital_frame_photo_changed`, `digital_frame_update_status_changed` and `digital_frame_problem_changed`.
+- Diagnostics: Home Assistant can download redacted integration diagnostics from the device/integration page.
 
 ## Services
 
@@ -122,7 +139,29 @@ service: digital_frame.screen_off
 ```
 
 ```yaml
+service: digital_frame.force_fullscreen
+```
+
+```yaml
+service: digital_frame.next_photo
+```
+
+```yaml
+service: digital_frame.restart_kiosk
+```
+
+```yaml
 service: digital_frame.restart_pc
+```
+
+You can also use Home Assistant's native notify action:
+
+```yaml
+service: notify.send_message
+target:
+  entity_id: notify.digital_frame_notify
+data:
+  message: Someone is at the front door.
 ```
 
 Example automation:
@@ -136,5 +175,35 @@ trigger:
     for: "00:10:00"
 action:
   - service: digital_frame.restart_pc
+mode: single
+```
+
+Example fullscreen watchdog:
+
+```yaml
+alias: Keep photo frame fullscreen
+trigger:
+  - platform: state
+    entity_id: binary_sensor.digital_frame_browser_fullscreen
+    to: "off"
+    for: "00:00:20"
+action:
+  - service: digital_frame.force_fullscreen
+mode: single
+```
+
+Example problem event:
+
+```yaml
+alias: Photo frame problem alert
+trigger:
+  - platform: event
+    event_type: digital_frame_problem_changed
+    event_data:
+      active: true
+action:
+  - service: notify.mobile_app_phone
+    data:
+      message: "The photo frame reports a problem."
 mode: single
 ```
