@@ -9,7 +9,8 @@ HACS custom integration for the local LAN Digital Frame. It talks directly to th
 - Screen on/off switch.
 - Selects for mode, editable mode list, photo selection and saved page; the mode list and saved pages refresh every 5 seconds.
 - Sensors for version, mode, screen status, photos, active page and mini PC health.
-- Services to show mode-list items, messages, URLs, save/show/delete pages, restart the mini PC and turn the screen on/off.
+- Text entity for sending a quick message from Home Assistant to the screen.
+- Services to show mode-list items, send messages, URLs, save/show/delete pages, restart the mini PC and turn the screen on/off.
 
 ## HACS installation
 
@@ -58,12 +59,21 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 - `select.*_photo_selection`: all visible photos or favorites only.
 - `select.*_mode_list`: the editable button list from the frame admin portal.
 - `select.*_page`: saved pages from the admin portal.
+- `text.*_send_message`: type a message and save it to show it on the frame for 60 seconds.
 - Sensors for version, mode, screen status, photo count and active page.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
 
 ## Services
 
 Use these in automations, for example:
+
+```yaml
+service: digital_frame.send_message
+data:
+  title: Doorbell
+  message: Someone is at the front door.
+  duration: 30
+```
 
 ```yaml
 service: digital_frame.show_page
@@ -98,6 +108,8 @@ data:
   message: Please empty it.
   duration: 60
 ```
+
+`digital_frame.show_message` remains available for older automations. New automations can use `digital_frame.send_message`.
 
 ```yaml
 service: digital_frame.show_url

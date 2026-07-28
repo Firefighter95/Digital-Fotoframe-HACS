@@ -9,19 +9,72 @@ show_message:
     title:
       name: Title
       example: "Laundry is ready"
+      selector:
+        text:
     message:
       name: Message
       required: true
       example: "Please empty it."
+      selector:
+        text:
+          multiline: true
     duration:
       name: Duration
       description: Seconds before returning to the previous mode. Use 0 to stay on this message.
       default: 60
       example: 60
+      selector:
+        number:
+          min: 0
+          max: 86400
+          step: 1
+          mode: box
+          unit_of_measurement: s
     accent:
       name: Accent color
       default: "#d5a849"
       example: "#d5a849"
+      selector:
+        text:
+
+send_message:
+  name: Send message
+  description: Temporarily send a message to the photo frame. This is the recommended action for automations.
+  fields:
+    entry_id:
+      name: Config entry
+      description: Optional entry_id when you have multiple frames.
+      example: "01J..."
+    title:
+      name: Title
+      example: "Laundry is ready"
+      selector:
+        text:
+    message:
+      name: Message
+      required: true
+      example: "Please empty it."
+      selector:
+        text:
+          multiline: true
+    duration:
+      name: Duration
+      description: Seconds before returning to the previous mode. Use 0 to stay on this message.
+      default: 60
+      example: 60
+      selector:
+        number:
+          min: 0
+          max: 86400
+          step: 1
+          mode: box
+          unit_of_measurement: s
+    accent:
+      name: Accent color
+      default: "#d5a849"
+      example: "#d5a849"
+      selector:
+        text:
 
 show_url:
   name: Show URL

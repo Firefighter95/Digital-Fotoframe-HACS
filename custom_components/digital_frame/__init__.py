@@ -25,6 +25,7 @@ from .const import (
 from .coordinator import DigitalFrameCoordinator
 
 SERVICE_SHOW_MESSAGE = "show_message"
+SERVICE_SEND_MESSAGE = "send_message"
 SERVICE_SHOW_URL = "show_url"
 SERVICE_SHOW_PAGE = "show_page"
 SERVICE_SAVE_PAGE = "save_page"
@@ -115,10 +116,7 @@ async def _run_frame_call(
 
 
 def _async_register_services(hass: HomeAssistant) -> None:
-    if hass.services.has_service(DOMAIN, SERVICE_SHOW_MESSAGE):
-        return
-
-    async def show_message(call: ServiceCall) -> None:
+    async def send_message(call: ServiceCall) -> None:
         await _run_frame_call(
             hass,
             call,
@@ -129,6 +127,9 @@ def _async_register_services(hass: HomeAssistant) -> None:
                 call.data["accent"],
             ),
         )
+
+    async def show_message(call: ServiceCall) -> None:
+        await send_message(call)
 
     async def show_url(call: ServiceCall) -> None:
         await _run_frame_call(hass, call, lambda api: api.async_show_url(call.data["url"]))
@@ -165,13 +166,18 @@ def _async_register_services(hass: HomeAssistant) -> None:
     async def restart_pc(call: ServiceCall) -> None:
         await _run_frame_call(hass, call, lambda api: api.async_system_power("restart"))
 
-    hass.services.async_register(DOMAIN, SERVICE_SHOW_MESSAGE, show_message, schema=SHOW_MESSAGE_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SHOW_URL, show_url, schema=SHOW_URL_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SHOW_PAGE, show_page, schema=SHOW_PAGE_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SHOW_MODE_ITEM, show_mode_item, schema=SHOW_MODE_ITEM_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SAVE_PAGE, save_page, schema=SAVE_PAGE_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_DELETE_PAGE, delete_page, schema=DELETE_PAGE_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SCREEN_ON, screen_on, schema=ENTRY_ONLY_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SCREEN_OFF, screen_off, schema=ENTRY_ONLY_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SHOW_MODE, show_mode, schema=SHOW_MODE_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_RESTART_PC, restart_pc, schema=ENTRY_ONLY_SCHEMA)
+    def register_once(service: str, handler: Callable[[ServiceCall], Awaitable[None]], schema: vol.Schema) -> None:
+        if not hass.services.has_service(DOMAIN, service):
+            hass.services.async_register(DOMAIN, service, handler, schema=schema)
+
+    register_once(SERVICE_SHOW_MESSAGE, show_message, SHOW_MESSAGE_SCHEMA)
+    register_once(SERVICE_SEND_MESSAGE, send_message, SHOW_MESSAGE_SCHEMA)
+    register_once(SERVICE_SHOW_URL, show_url, SHOW_URL_SCHEMA)
+    register_once(SERVICE_SHOW_PAGE, show_page, SHOW_PAGE_SCHEMA)
+    register_once(SERVICE_SHOW_MODE_ITEM, show_mode_item, SHOW_MODE_ITEM_SCHEMA)
+    register_once(SERVICE_SAVE_PAGE, save_page, SAVE_PAGE_SCHEMA)
+    register_once(SERVICE_DELETE_PAGE, delete_page, DELETE_PAGE_SCHEMA)
+    register_once(SERVICE_SCREEN_ON, screen_on, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_SCREEN_OFF, screen_off, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_SHOW_MODE, show_mode, SHOW_MODE_SCHEMA)
+    register_once(SERVICE_RESTART_PC, restart_pc, ENTRY_ONLY_SCHEMA)

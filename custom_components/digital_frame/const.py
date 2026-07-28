@@ -11,7 +11,7 @@ DEFAULT_ACTOR = "Home Assistant"
 CONF_ACTOR = "actor"
 CONF_PIN = "pin"
 
-PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.SELECT]
+PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.SELECT, Platform.TEXT]
 
 MODE_OPTIONS = {
     "slideshow": "Photos",

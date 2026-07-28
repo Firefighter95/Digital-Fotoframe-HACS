@@ -21,5 +21,12 @@
     "abort": {
       "already_configured": "Deze fotolijst is al ingesteld."
     }
+  },
+  "entity": {
+    "text": {
+      "message_text": {
+        "name": "Bericht sturen"
+      }
+    }
   }
 }
