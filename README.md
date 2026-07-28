@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. Basic controls expect server `V 1.7.0` or newer; the editable mode-list selector expects server `V 1.10.0` or newer; PC sensors and restart service expect server `V 1.11.0` or newer. The full smart-screen entity set expects server `V 2.0.0` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.0.1` or newer.
 
 ## Features
 
