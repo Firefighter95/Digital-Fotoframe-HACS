@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.4` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.5` or newer.
 
 ## Features
 
@@ -49,11 +49,9 @@ info.md
    - Actor: `Home Assistant`
 11. Optional: open the integration options/Configure screen or use the `Weather entity` select and choose a `weather.*` entity. The integration pushes that weather data to the frame every time it changes.
 
-Alternative release route: the included `hacs.json` also supports a GitHub Release asset named `digital-frame-home-assistant-hacs.zip`. If you use this route, the default branch still needs a valid `hacs.json`, and the release must contain the zip asset with exactly that filename.
-
 When publishing, update `documentation` and `issue_tracker` in `custom_components/digital_frame/manifest.json` to your own repository.
 
-If HACS shows `Repository structure for main is not compliant`, the repository root is wrong or only the zip was uploaded to the branch. Move `custom_components`, `README.md`, `hacs.json` and `info.md` to the top level of the `main` branch, or publish the zip as a GitHub Release asset named `digital-frame-home-assistant-hacs.zip`.
+If HACS shows `Repository structure for main is not compliant`, the repository root is wrong or only the zip was uploaded to the branch. Move `custom_components`, `README.md`, `hacs.json` and `info.md` to the top level of the `main` branch. Do not upload `digital-frame-home-assistant-hacs.zip` as a file inside `main`.
 
 ## Manual testing
 
