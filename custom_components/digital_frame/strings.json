@@ -32,5 +32,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "select": {
+      "weather_entity_select": {
+        "name": "Weather entity"
+      }
+    }
   }
 }

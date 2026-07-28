@@ -123,6 +123,9 @@
       "f1_provider_select": {
         "name": "F1-bron"
       },
+      "weather_entity_select": {
+        "name": "Weer-entiteit"
+      },
       "smart_morning_mode_select": {
         "name": "Slimme ochtendmodus"
       },

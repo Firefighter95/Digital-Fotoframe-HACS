@@ -8,7 +8,16 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CLOCK_POSITION_OPTIONS, DOMAIN, F1_PROVIDER_OPTIONS, MODE_OPTIONS, PHOTO_FIT_OPTIONS, PHOTO_SOURCE_OPTIONS, SMART_MODE_OPTIONS
+from .const import (
+    CLOCK_POSITION_OPTIONS,
+    CONF_WEATHER_ENTITY,
+    DOMAIN,
+    F1_PROVIDER_OPTIONS,
+    MODE_OPTIONS,
+    PHOTO_FIT_OPTIONS,
+    PHOTO_SOURCE_OPTIONS,
+    SMART_MODE_OPTIONS,
+)
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
 
@@ -45,6 +54,7 @@ async def async_setup_entry(
             DigitalFrameModeItemSelect(coordinator),
             DigitalFramePhotoSourceSelect(coordinator),
             DigitalFramePageSelect(coordinator),
+            DigitalFrameWeatherEntitySelect(coordinator),
             *[DigitalFrameConfigSelect(coordinator, description) for description in CONFIG_SELECTS],
         ]
     )
@@ -186,6 +196,43 @@ class DigitalFramePageSelect(DigitalFrameEntity, SelectEntity):
             options.append(label)
             by_id[page_id] = label
         return options, by_id
+
+
+class DigitalFrameWeatherEntitySelect(DigitalFrameEntity, SelectEntity):
+    _off_option = "Off"
+
+    def __init__(self, coordinator: DigitalFrameCoordinator) -> None:
+        super().__init__(coordinator, "weather_entity_select", "Weather entity")
+        self._attr_icon = "mdi:weather-partly-cloudy"
+
+    @property
+    def options(self) -> list[str]:
+        current = self._current_entity_id()
+        entities = sorted(self.coordinator.hass.states.async_entity_ids("weather"))
+        options = [self._off_option, *entities]
+        if current and current not in entities:
+            options.append(current)
+        return options
+
+    @property
+    def current_option(self) -> str | None:
+        return self._current_entity_id() or self._off_option
+
+    async def async_select_option(self, option: str) -> None:
+        if option != self._off_option and not option.startswith("weather."):
+            raise HomeAssistantError(f"Onbekende weer-entiteit: {option}")
+        new_options = dict(self.coordinator.config_entry.options)
+        new_options[CONF_WEATHER_ENTITY] = "" if option == self._off_option else option
+        self.coordinator.hass.config_entries.async_update_entry(
+            self.coordinator.config_entry,
+            options=new_options,
+        )
+        self.coordinator._weather_last_payload = ""
+        self.coordinator._weather_last_push = 0.0
+        await self.coordinator.async_request_refresh()
+
+    def _current_entity_id(self) -> str:
+        return str(self.coordinator.config_entry.options.get(CONF_WEATHER_ENTITY) or "").strip()
 
 
 class DigitalFrameConfigSelect(DigitalFrameEntity, SelectEntity):

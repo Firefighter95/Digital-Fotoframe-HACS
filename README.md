@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.0` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.3` or newer.
 
 ## Features
 
@@ -8,13 +8,13 @@ HACS custom integration for the local LAN Digital Frame. It talks directly to th
 - Device in Devices & services.
 - Notify entity for `notify.send_message`.
 - Screen on/off, clock, shuffle, clock backdrop, favorites-only, adaptive readability, burn-in protection, smooth transitions, smart day mode, self-healing and page-error fallback switches.
-- Selects for mode, editable mode list, photo selection, saved page, clock position, photo fit, F1 provider and smart day/evening/night target modes; the mode list and saved pages refresh every 5 seconds.
+- Selects for mode, editable mode list, photo selection, saved page, weather entity, clock position, photo fit, F1 provider and smart day/evening/night target modes; the mode list and saved pages refresh every 5 seconds.
 - Number entities for slideshow interval, photo dark overlay, clock size, clock backdrop opacity and web-page fallback timing.
 - Button entities for reload, fullscreen, next/previous photo, identify, admin QR, apply smart mode, kiosk restart, PC power actions and applying an uploaded update.
 - Binary sensors for display connection, kiosk browser connection, fullscreen and problem state.
 - Sensors for version, mode, screen status, current photo, current URL, update status, latest upload and mini PC health.
 - Uptime sensors are shown as readable durations, and date fields are shown as local date/time strings.
-- Optional weather entity sync: choose a `weather.*` entity in the integration options and the frame shows temperature, condition, humidity and wind next to the clock.
+- Optional weather entity sync: choose a `weather.*` entity in the integration options or the `Weather entity` select, and the frame shows temperature, condition, humidity and wind next to the clock.
 - Status image entity with a lightweight current-view summary.
 - Text entities for sending a quick message and editing smart day-mode start times.
 - Services to show mode-list items, send priority messages, URLs, save/show/delete pages, show the admin QR, apply smart mode, reload/fullscreen the display, control photos, restart the kiosk browser, apply an uploaded update, restart/shutdown the mini PC and turn the screen on/off.
@@ -24,7 +24,7 @@ HACS custom integration for the local LAN Digital Frame. It talks directly to th
 ## HACS installation
 
 1. Extract `digital-frame-home-assistant-hacs.zip`.
-2. Put the extracted contents in the root of your GitHub repository. Do not commit the zip file itself and do not keep an extra parent folder around it.
+2. Put the extracted contents in the root of your GitHub repository. Do not put the zip itself in `main` as the only file and do not keep an extra parent folder around it.
 3. Check that the GitHub root shows this structure:
 
 ```text
@@ -47,11 +47,13 @@ info.md
    - Port: `8787`
    - PIN: the admin PIN of the photo frame
    - Actor: `Home Assistant`
-11. Optional: open the integration options/Configure screen and choose a `weather.*` entity. The integration pushes that weather data to the frame every time it changes.
+11. Optional: open the integration options/Configure screen or use the `Weather entity` select and choose a `weather.*` entity. The integration pushes that weather data to the frame every time it changes.
+
+Alternative release route: the included `hacs.json` also supports a GitHub Release asset named `digital-frame-home-assistant-hacs.zip`. If you use this route, the default branch still needs a valid `hacs.json`, and the release must contain the zip asset with exactly that filename.
 
 When publishing, update `documentation` and `issue_tracker` in `custom_components/digital_frame/manifest.json` to your own repository.
 
-If HACS shows `Repository structure for main is not compliant`, the repository root is wrong. Move `custom_components`, `README.md`, `hacs.json` and `info.md` to the top level of the `main` branch and remove any wrapping folder such as `digital-frame-home-assistant`.
+If HACS shows `Repository structure for main is not compliant`, the repository root is wrong or only the zip was uploaded to the branch. Move `custom_components`, `README.md`, `hacs.json` and `info.md` to the top level of the `main` branch, or publish the zip as a GitHub Release asset named `digital-frame-home-assistant-hacs.zip`.
 
 ## Manual testing
 
@@ -70,7 +72,7 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 - `select.*_photo_selection`: all visible photos or favorites only.
 - `select.*_mode_list`: the editable button list from the frame admin portal.
 - `select.*_page`: saved pages from the admin portal.
-- Other selects: clock position, photo fit, F1 provider and smart target modes.
+- Other selects: weather entity, clock position, photo fit, F1 provider and smart target modes.
 - Numbers: slideshow interval, photo dark overlay, clock size, clock backdrop opacity and page fallback seconds.
 - Buttons: reload display, force fullscreen, next/previous photo, identify, show admin QR, apply smart mode, restart kiosk browser, PC restart/shutdown/cancel and apply uploaded update.
 - Binary sensors: display connected, kiosk browser connected, browser fullscreen and problem.
@@ -81,7 +83,7 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 - Smart start text entities: edit the `HH:MM` start time for morning, day, evening and night slots.
 - Sensors for version, mode, screen status, photo count, active page, current photo, current URL, browser status, update status, latest upload, smart slot, self-healing last action and last error.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
-- Weather entity option: not a separate Home Assistant entity; it is selected in the integration options and synced to the photo frame clock.
+- Weather entity select: choose which Home Assistant `weather.*` entity is synced to the photo frame clock, or select `Off`.
 - Events: `digital_frame_mode_changed`, `digital_frame_photo_changed`, `digital_frame_update_status_changed` and `digital_frame_problem_changed`.
 - Diagnostics: Home Assistant can download redacted integration diagnostics from the device/integration page.
 

@@ -1,5 +1,8 @@
 {
-  "name": "Digitale Fotolijst",
+  "name": "Digital Frame",
   "homeassistant": "2024.6.0",
+  "domains": ["digital_frame"],
+  "zip_release": true,
+  "filename": "digital-frame-home-assistant-hacs.zip",
   "render_readme": true
 }

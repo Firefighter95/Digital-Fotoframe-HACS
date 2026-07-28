@@ -123,6 +123,9 @@
       "f1_provider_select": {
         "name": "F1 provider"
       },
+      "weather_entity_select": {
+        "name": "Weather entity"
+      },
       "smart_morning_mode_select": {
         "name": "Smart morning mode"
       },
