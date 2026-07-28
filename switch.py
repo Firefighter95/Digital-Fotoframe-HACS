@@ -1,0 +1,269 @@
+show_message:
+  name: Show message
+  description: Temporarily show a message on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+      description: Optional entry_id when you have multiple frames.
+      example: "01J..."
+    title:
+      name: Title
+      example: "Laundry is ready"
+      selector:
+        text:
+    message:
+      name: Message
+      required: true
+      example: "Please empty it."
+      selector:
+        text:
+          multiline: true
+    duration:
+      name: Duration
+      description: Seconds before returning to the previous mode. Use 0 to stay on this message.
+      default: 60
+      example: 60
+      selector:
+        number:
+          min: 0
+          max: 86400
+          step: 1
+          mode: box
+          unit_of_measurement: s
+    accent:
+      name: Accent color
+      default: "#d5a849"
+      example: "#d5a849"
+      selector:
+        text:
+    priority:
+      name: Priority
+      default: normal
+      selector:
+        select:
+          options:
+            - low
+            - normal
+            - high
+            - critical
+
+send_message:
+  name: Send message
+  description: Temporarily send a message to the photo frame. This is the recommended action for automations.
+  fields:
+    entry_id:
+      name: Config entry
+      description: Optional entry_id when you have multiple frames.
+      example: "01J..."
+    title:
+      name: Title
+      example: "Laundry is ready"
+      selector:
+        text:
+    message:
+      name: Message
+      required: true
+      example: "Please empty it."
+      selector:
+        text:
+          multiline: true
+    duration:
+      name: Duration
+      description: Seconds before returning to the previous mode. Use 0 to stay on this message.
+      default: 60
+      example: 60
+      selector:
+        number:
+          min: 0
+          max: 86400
+          step: 1
+          mode: box
+          unit_of_measurement: s
+    accent:
+      name: Accent color
+      default: "#d5a849"
+      example: "#d5a849"
+      selector:
+        text:
+    priority:
+      name: Priority
+      default: normal
+      selector:
+        select:
+          options:
+            - low
+            - normal
+            - high
+            - critical
+
+show_url:
+  name: Show URL
+  description: Open a single web page fullscreen on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+    url:
+      name: URL
+      required: true
+      example: "http://homeassistant.local:8123/lovelace/0?kiosk"
+
+show_page:
+  name: Show saved page
+  description: Show a page saved in the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+    page_id:
+      name: Page ID
+      required: true
+      example: "home-assistant"
+
+show_mode_item:
+  name: Show mode list item
+  description: Show an item from the editable mode list in the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+    mode_item_id:
+      name: Mode list item ID
+      required: true
+      example: "weather"
+
+save_page:
+  name: Save page
+  description: Save a web page in the photo frame page list.
+  fields:
+    entry_id:
+      name: Config entry
+    name:
+      name: Name
+      required: true
+      example: "Weather"
+    url:
+      name: URL
+      required: true
+      example: "https://example.com/dashboard"
+    page_id:
+      name: Page ID
+      description: Optional stable ID. Leave empty to let the frame create one from the name.
+      example: "weather"
+
+delete_page:
+  name: Delete page
+  description: Delete a saved page from the photo frame page list.
+  fields:
+    entry_id:
+      name: Config entry
+    page_id:
+      name: Page ID
+      required: true
+      example: "weather"
+
+screen_on:
+  name: Screen on
+  description: Turn the Windows display on.
+  fields:
+    entry_id:
+      name: Config entry
+
+screen_off:
+  name: Screen off
+  description: Turn the Windows display off.
+  fields:
+    entry_id:
+      name: Config entry
+
+restart_pc:
+  name: Restart PC
+  description: Restart the Windows mini PC after the photo frame server schedules a 10 second restart.
+  fields:
+    entry_id:
+      name: Config entry
+
+shutdown_pc:
+  name: Shut down PC
+  description: Shut down the Windows mini PC after the photo frame server schedules a 10 second shutdown.
+  fields:
+    entry_id:
+      name: Config entry
+
+cancel_shutdown:
+  name: Cancel shutdown
+  description: Cancel a scheduled Windows restart or shutdown.
+  fields:
+    entry_id:
+      name: Config entry
+
+reload_display:
+  name: Reload display
+  description: Reload the active kiosk page.
+  fields:
+    entry_id:
+      name: Config entry
+
+force_fullscreen:
+  name: Force fullscreen
+  description: Ask the kiosk browser to return to fullscreen and hide browser/window bars.
+  fields:
+    entry_id:
+      name: Config entry
+
+next_photo:
+  name: Next photo
+  description: Switch the slideshow to the next photo.
+  fields:
+    entry_id:
+      name: Config entry
+
+previous_photo:
+  name: Previous photo
+  description: Switch the slideshow to the previous photo.
+  fields:
+    entry_id:
+      name: Config entry
+
+identify:
+  name: Identify
+  description: Show a short identification message on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+
+show_admin_qr:
+  name: Show admin QR
+  description: Temporarily show a QR code that opens the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+
+apply_smart_mode:
+  name: Apply smart mode
+  description: Apply the current smart-day schedule slot immediately.
+  fields:
+    entry_id:
+      name: Config entry
+
+restart_kiosk:
+  name: Restart kiosk browser
+  description: Restart only the kiosk browser profile and reopen the current display URL.
+  fields:
+    entry_id:
+      name: Config entry
+
+apply_update:
+  name: Apply uploaded update
+  description: Apply the update package that was already uploaded through the photo frame admin portal.
+  fields:
+    entry_id:
+      name: Config entry
+
+show_mode:
+  name: Show mode
+  description: Switch to a built-in photo frame mode.
+  fields:
+    entry_id:
+      name: Config entry
+    mode:
+      name: Mode
+      required: true
+      example: "slideshow"

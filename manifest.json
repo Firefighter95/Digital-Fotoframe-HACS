@@ -1,0 +1,70 @@
+{
+  "services": {
+    "show_message": {
+      "service": "mdi:message-badge-outline"
+    },
+    "send_message": {
+      "service": "mdi:message-text-outline"
+    },
+    "show_url": {
+      "service": "mdi:web"
+    },
+    "show_page": {
+      "service": "mdi:file-eye-outline"
+    },
+    "save_page": {
+      "service": "mdi:content-save-outline"
+    },
+    "delete_page": {
+      "service": "mdi:delete-outline"
+    },
+    "show_mode": {
+      "service": "mdi:view-dashboard-outline"
+    },
+    "show_mode_item": {
+      "service": "mdi:button-pointer"
+    },
+    "screen_on": {
+      "service": "mdi:monitor"
+    },
+    "screen_off": {
+      "service": "mdi:monitor-off"
+    },
+    "reload_display": {
+      "service": "mdi:reload"
+    },
+    "force_fullscreen": {
+      "service": "mdi:fullscreen"
+    },
+    "next_photo": {
+      "service": "mdi:skip-next"
+    },
+    "previous_photo": {
+      "service": "mdi:skip-previous"
+    },
+    "identify": {
+      "service": "mdi:crosshairs-gps"
+    },
+    "show_admin_qr": {
+      "service": "mdi:qrcode"
+    },
+    "apply_smart_mode": {
+      "service": "mdi:calendar-sync"
+    },
+    "restart_kiosk": {
+      "service": "mdi:web-refresh"
+    },
+    "apply_update": {
+      "service": "mdi:package-up"
+    },
+    "restart_pc": {
+      "service": "mdi:restart"
+    },
+    "shutdown_pc": {
+      "service": "mdi:power"
+    },
+    "cancel_shutdown": {
+      "service": "mdi:cancel"
+    }
+  }
+}
