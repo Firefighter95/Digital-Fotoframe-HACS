@@ -1,6 +1,6 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.1.5` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.2.0` or newer.
 
 ## Features
 
@@ -12,7 +12,7 @@ HACS custom integration for the local LAN Digital Frame. It talks directly to th
 - Number entities for slideshow interval, photo dark overlay, clock size, clock backdrop opacity and web-page fallback timing.
 - Button entities for reload, fullscreen, next/previous photo, identify, admin QR, apply smart mode, kiosk restart, PC power actions and applying an uploaded update.
 - Binary sensors for display connection, kiosk browser connection, fullscreen and problem state.
-- Sensors for version, mode, screen status, current photo, current URL, update status, latest upload and mini PC health.
+- Sensors for version, mode, screen status, current photo, current URL, update status, latest upload, display health and mini PC health.
 - Uptime sensors are shown as readable durations, and date fields are shown as local date/time strings.
 - Optional weather entity sync: choose a `weather.*` entity in the integration options or the `Weather entity` select, and the frame shows temperature, condition, humidity and wind next to the clock.
 - Status image entity with a lightweight current-view summary.
@@ -80,6 +80,7 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 - `text.*_send_message`: type a message and save it to show it on the frame for 60 seconds.
 - Smart start text entities: edit the `HH:MM` start time for morning, day, evening and night slots.
 - Sensors for version, mode, screen status, photo count, active page, current photo, current URL, browser status, update status, latest upload, smart slot, self-healing last action and last error.
+- Display-health sensors: uptime, slide nodes and JS heap used.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
 - Weather entity select: choose which Home Assistant `weather.*` entity is synced to the photo frame clock, or select `Off`.
 - Events: `digital_frame_mode_changed`, `digital_frame_photo_changed`, `digital_frame_update_status_changed` and `digital_frame_problem_changed`.

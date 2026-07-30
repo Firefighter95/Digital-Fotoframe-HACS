@@ -253,6 +253,33 @@ SENSORS: tuple[dict[str, Any], ...] = (
         },
     },
     {
+        "key": "display_uptime",
+        "name": "Display uptime",
+        "value_fn": lambda data: format_duration(_display(data).get("displayUptimeSeconds")),
+        "icon": "mdi:timer-sand",
+        "attributes_fn": lambda data: {
+            "seconds": _display(data).get("displayUptimeSeconds"),
+        },
+    },
+    {
+        "key": "display_slide_nodes",
+        "name": "Display slide nodes",
+        "value_fn": lambda data: _display(data).get("slideNodeCount"),
+        "icon": "mdi:image-multiple-outline",
+        "state_class": SensorStateClass.MEASUREMENT,
+    },
+    {
+        "key": "display_js_heap_used",
+        "name": "Display JS heap used",
+        "value_fn": lambda data: _display(data).get("jsHeapUsed"),
+        "unit": UnitOfInformation.BYTES,
+        "icon": "mdi:memory",
+        "state_class": SensorStateClass.MEASUREMENT,
+        "attributes_fn": lambda data: {
+            "heap_limit": _display(data).get("jsHeapLimit"),
+        },
+    },
+    {
         "key": "update_status",
         "name": "Update status",
         "value_fn": lambda data: _update(data).get("status"),
