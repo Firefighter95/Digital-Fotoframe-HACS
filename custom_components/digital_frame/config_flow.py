@@ -11,7 +11,24 @@ from homeassistant.helpers import config_validation as cv, selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import DigitalFrameApi, DigitalFrameAuthError, DigitalFrameCannotConnect, DigitalFrameError
-from .const import CONF_ACTOR, CONF_PIN, CONF_WEATHER_ENTITY, DEFAULT_ACTOR, DEFAULT_HOST, DEFAULT_NAME, DEFAULT_PORT, DOMAIN
+from .const import (
+    CONF_ACTOR,
+    CONF_F1_DASHBOARD_URL,
+    CONF_F1_CURRENT_SESSION_ENTITY,
+    CONF_F1_DRIVER_LIST_ENTITY,
+    CONF_F1_DRIVER_POSITIONS_ENTITY,
+    CONF_F1_RACE_LAP_ENTITY,
+    CONF_F1_TRACK_STATUS_ENTITY,
+    CONF_F1_TYRES_ENTITY,
+    CONF_PIN,
+    CONF_WEATHER_ENTITY,
+    DEFAULT_ACTOR,
+    DEFAULT_F1_SENSOR_ENTITIES,
+    DEFAULT_HOST,
+    DEFAULT_NAME,
+    DEFAULT_PORT,
+    DOMAIN,
+)
 
 
 class DigitalFrameConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -83,22 +100,51 @@ class DigitalFrameOptionsFlow(config_entries.OptionsFlow):
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         if user_input is not None:
             weather_entity = str(user_input.get(CONF_WEATHER_ENTITY) or "").strip()
-            return self.async_create_entry(title="", data={CONF_WEATHER_ENTITY: weather_entity})
+            data = {CONF_WEATHER_ENTITY: weather_entity}
+            for key in DEFAULT_F1_SENSOR_ENTITIES:
+                data[key] = str(user_input.get(key) or "").strip()
+            data[CONF_F1_DASHBOARD_URL] = str(user_input.get(CONF_F1_DASHBOARD_URL) or "").strip()
+            return self.async_create_entry(title="", data=data)
 
         options = self.config_entry.options
         weather_entity = options.get(CONF_WEATHER_ENTITY, "")
-        field = (
+        f1_dashboard_url = options.get(CONF_F1_DASHBOARD_URL, "")
+        weather_field = (
             vol.Optional(CONF_WEATHER_ENTITY, default=weather_entity)
             if weather_entity
             else vol.Optional(CONF_WEATHER_ENTITY)
         )
+
+        def f1_field(key: str) -> vol.Optional:
+            value = options.get(key, DEFAULT_F1_SENSOR_ENTITIES[key])
+            return vol.Optional(key, default=value) if value else vol.Optional(key)
+
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    field: selector.EntitySelector(
+                    weather_field: selector.EntitySelector(
                         selector.EntitySelectorConfig(domain="weather")
                     ),
+                    f1_field(CONF_F1_DRIVER_POSITIONS_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    f1_field(CONF_F1_DRIVER_LIST_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    f1_field(CONF_F1_TYRES_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    f1_field(CONF_F1_TRACK_STATUS_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    f1_field(CONF_F1_CURRENT_SESSION_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    f1_field(CONF_F1_RACE_LAP_ENTITY): selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    vol.Optional(CONF_F1_DASHBOARD_URL, default=f1_dashboard_url): cv.string,
                 }
             ),
         )

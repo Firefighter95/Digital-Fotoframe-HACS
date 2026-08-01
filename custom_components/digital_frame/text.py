@@ -24,13 +24,17 @@ class DigitalFrameConfigTextDescription:
     name: str
     config_key: str
     icon: str
+    min_length: int = 0
+    max_length: int = 120
 
 
 CONFIG_TEXTS: tuple[DigitalFrameConfigTextDescription, ...] = (
-    DigitalFrameConfigTextDescription("smart_morning_start", "Smart morning start", "smartMorningStart", "mdi:weather-sunset-up"),
-    DigitalFrameConfigTextDescription("smart_day_start", "Smart day start", "smartDayStart", "mdi:white-balance-sunny"),
-    DigitalFrameConfigTextDescription("smart_evening_start", "Smart evening start", "smartEveningStart", "mdi:weather-sunset-down"),
-    DigitalFrameConfigTextDescription("smart_night_start", "Smart night start", "smartNightStart", "mdi:weather-night"),
+    DigitalFrameConfigTextDescription("countdown_title", "Countdown title", "countdownTitle", "mdi:format-title", 0, 120),
+    DigitalFrameConfigTextDescription("countdown_target", "Countdown target", "countdownTarget", "mdi:calendar-clock", 0, 40),
+    DigitalFrameConfigTextDescription("smart_morning_start", "Smart morning start", "smartMorningStart", "mdi:weather-sunset-up", 5, 5),
+    DigitalFrameConfigTextDescription("smart_day_start", "Smart day start", "smartDayStart", "mdi:white-balance-sunny", 5, 5),
+    DigitalFrameConfigTextDescription("smart_evening_start", "Smart evening start", "smartEveningStart", "mdi:weather-sunset-down", 5, 5),
+    DigitalFrameConfigTextDescription("smart_night_start", "Smart night start", "smartNightStart", "mdi:weather-night", 5, 5),
 )
 
 
@@ -119,11 +123,11 @@ class DigitalFrameConfigText(DigitalFrameEntity, TextEntity):
 
     @property
     def native_min(self) -> int:
-        return 5
+        return self.entity_description.min_length
 
     @property
     def native_max(self) -> int:
-        return 5
+        return self.entity_description.max_length
 
     @property
     def native_value(self) -> str | None:

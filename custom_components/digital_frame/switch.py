@@ -35,6 +35,14 @@ CONFIG_SWITCHES: tuple[DigitalFrameSwitchDescription, ...] = (
         lambda coordinator: coordinator.async_call_and_refresh(coordinator.api.async_update_config(showClock=False)),
     ),
     DigitalFrameSwitchDescription(
+        "countdown_enabled",
+        "Countdown",
+        "mdi:timer-outline",
+        lambda data: data.get("config", {}).get("countdownEnabled") is True,
+        lambda coordinator: coordinator.async_call_and_refresh(coordinator.api.async_update_config(countdownEnabled=True)),
+        lambda coordinator: coordinator.async_call_and_refresh(coordinator.api.async_update_config(countdownEnabled=False)),
+    ),
+    DigitalFrameSwitchDescription(
         "shuffle",
         "Shuffle photos",
         "mdi:shuffle",

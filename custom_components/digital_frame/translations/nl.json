@@ -26,9 +26,16 @@
     "step": {
       "init": {
         "title": "Displayopties",
-        "description": "Kies een Home Assistant weer-entiteit om naast de klok op de fotolijst te tonen.",
+        "description": "Kies de weer-entiteit en optionele F1 Sensor entities die de fotolijst gebruikt.",
         "data": {
-          "weather_entity": "Weer-entiteit"
+          "weather_entity": "Weer-entiteit",
+          "f1_driver_positions_entity": "F1 positiesensor",
+          "f1_driver_list_entity": "F1 coureursensor",
+          "f1_tyres_entity": "F1 bandensensor",
+          "f1_track_status_entity": "F1 baanstatussensor",
+          "f1_current_session_entity": "F1 sessiesensor",
+          "f1_race_lap_entity": "F1 rondesensor",
+          "f1_dashboard_url": "F1 dashboard-URL"
         }
       }
     }
@@ -66,6 +73,9 @@
       },
       "show_admin_qr": {
         "name": "Admin QR tonen"
+      },
+      "show_f1_dashboard": {
+        "name": "F1 dashboard tonen"
       },
       "apply_smart_mode": {
         "name": "Slimme modus toepassen"
@@ -117,6 +127,9 @@
       "clock_position_select": {
         "name": "Klokpositie"
       },
+      "countdown_position_select": {
+        "name": "Aftelpositie"
+      },
       "photo_fit_select": {
         "name": "Fotopassing"
       },
@@ -139,9 +152,17 @@
         "name": "Slimme nachtmodus"
       }
     },
+    "sensor": {
+      "f1_sync": {
+        "name": "F1 sync"
+      }
+    },
     "switch": {
       "clock_enabled": {
         "name": "Klok"
+      },
+      "countdown_enabled": {
+        "name": "Afteltimer"
       },
       "shuffle": {
         "name": "Foto's schudden"
@@ -174,6 +195,12 @@
     "text": {
       "message_text": {
         "name": "Bericht sturen"
+      },
+      "countdown_title": {
+        "name": "Afteltitel"
+      },
+      "countdown_target": {
+        "name": "Aftellen tot"
       },
       "smart_morning_start": {
         "name": "Ochtend start"

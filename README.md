@@ -1,23 +1,24 @@
 # Digital Frame for Home Assistant
 
-HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.2.0` or newer.
+HACS custom integration for the local LAN Digital Frame. It talks directly to the frame server on the mini PC. This integration expects frame server `V 2.4.0` or newer.
 
 ## Features
 
 - UI configuration through Home Assistant.
 - Device in Devices & services.
 - Notify entity for `notify.send_message`.
-- Screen on/off, clock, shuffle, clock backdrop, favorites-only, adaptive readability, burn-in protection, smooth transitions, smart day mode, self-healing and page-error fallback switches.
-- Selects for mode, editable mode list, photo selection, saved page, weather entity, clock position, photo fit, F1 provider and smart day/evening/night target modes; the mode list and saved pages refresh every 5 seconds.
+- Screen on/off, clock, countdown, shuffle, clock backdrop, favorites-only, adaptive readability, burn-in protection, smooth transitions, smart day mode, self-healing and page-error fallback switches.
+- Selects for mode, editable mode list, photo selection, saved page, weather entity, clock position, countdown position, photo fit, F1 provider and smart day/evening/night target modes; the mode list and saved pages refresh every 5 seconds.
 - Number entities for slideshow interval, photo dark overlay, clock size, clock backdrop opacity and web-page fallback timing.
-- Button entities for reload, fullscreen, next/previous photo, identify, admin QR, apply smart mode, kiosk restart, PC power actions and applying an uploaded update.
+- Button entities for reload, fullscreen, next/previous photo, identify, admin QR, F1 dashboard, apply smart mode, kiosk restart, PC power actions and applying an uploaded update.
 - Binary sensors for display connection, kiosk browser connection, fullscreen and problem state.
-- Sensors for version, mode, screen status, current photo, current URL, update status, latest upload, display health and mini PC health.
+- Sensors for version, mode, screen status, current photo, current URL, F1 sync, update status, latest upload, display health and mini PC health.
 - Uptime sensors are shown as readable durations, and date fields are shown as local date/time strings.
 - Optional weather entity sync: choose a `weather.*` entity in the integration options or the `Weather entity` select, and the frame shows temperature, condition, humidity and wind next to the clock.
+- Optional F1 Sensor support: set the F1 dashboard URL to open the bundled `Nicxe/f1_sensor` Lovelace cards fullscreen, and optionally map the F1 Sensor entities used by the built-in lightweight F1 mode.
 - Status image entity with a lightweight current-view summary.
-- Text entities for sending a quick message and editing smart day-mode start times.
-- Services to show mode-list items, send priority messages, URLs, save/show/delete pages, show the admin QR, apply smart mode, reload/fullscreen the display, control photos, restart the kiosk browser, apply an uploaded update, restart/shutdown the mini PC and turn the screen on/off.
+- Text entities for sending a quick message, editing countdown title/target and editing smart day-mode start times.
+- Services to show mode-list items, send priority messages, URLs, save/show/delete pages, show the admin QR, show the configured F1 dashboard, apply smart mode, reload/fullscreen the display, control photos, restart the kiosk browser, apply an uploaded update, restart/shutdown the mini PC and turn the screen on/off.
 - Home Assistant events for mode changes, photo changes, update status changes and problem changes.
 - Diagnostics export with PIN, host and URL fields redacted.
 
@@ -47,7 +48,7 @@ info.md
    - Port: `8787`
    - PIN: the admin PIN of the photo frame
    - Actor: `Home Assistant`
-11. Optional: open the integration options/Configure screen or use the `Weather entity` select and choose a `weather.*` entity. The integration pushes that weather data to the frame every time it changes.
+11. Optional: open the integration options/Configure screen. Choose a `weather.*` entity, fill the F1 dashboard URL for your `f1_sensor` Lovelace cards, and adjust the F1 Sensor entity IDs if your Home Assistant entity registry uses different names.
 
 When publishing, update `documentation` and `issue_tracker` in `custom_components/digital_frame/manifest.json` to your own repository.
 
@@ -65,23 +66,25 @@ In the frame admin portal, give the name `Home Assistant` at least the `Display 
 ## Entities
 
 - `switch.*_screen`: screen on/off.
-- Other switches: clock, shuffle, clock backdrop, favorites-only, adaptive readability, burn-in protection, smooth transitions, smart day mode, self-healing and page-error fallback.
+- Other switches: clock, countdown, shuffle, clock backdrop, favorites-only, adaptive readability, burn-in protection, smooth transitions, smart day mode, self-healing and page-error fallback.
 - `select.*_mode`: photos, web page, F1, message, meters, admin QR or blank screen.
 - `select.*_photo_selection`: all visible photos or favorites only.
 - `select.*_mode_list`: the editable button list from the frame admin portal.
 - `select.*_page`: saved pages from the admin portal.
-- Other selects: weather entity, clock position, photo fit, F1 provider and smart target modes.
+- Other selects: weather entity, clock position, countdown position, photo fit, F1 provider and smart target modes.
 - Numbers: slideshow interval, photo dark overlay, clock size, clock backdrop opacity and page fallback seconds.
-- Buttons: reload display, force fullscreen, next/previous photo, identify, show admin QR, apply smart mode, restart kiosk browser, PC restart/shutdown/cancel and apply uploaded update.
+- Buttons: reload display, force fullscreen, next/previous photo, identify, show admin QR, show F1 dashboard, apply smart mode, restart kiosk browser, PC restart/shutdown/cancel and apply uploaded update.
 - Binary sensors: display connected, kiosk browser connected, browser fullscreen and problem.
 - Update entity: apply an update package after it has been uploaded through the frame admin portal.
 - Image entity: lightweight status image for dashboard cards.
 - Notify entity: use Home Assistant's `notify.send_message` action.
 - `text.*_send_message`: type a message and save it to show it on the frame for 60 seconds.
+- Countdown text entities: edit the countdown title and target. Use a local datetime string such as `2026-12-31T23:59`.
 - Smart start text entities: edit the `HH:MM` start time for morning, day, evening and night slots.
 - Sensors for version, mode, screen status, photo count, active page, current photo, current URL, browser status, update status, latest upload, smart slot, self-healing last action and last error.
 - Display-health sensors: uptime, slide nodes and JS heap used.
 - PC sensors: status, uptime, CPU usage, memory usage, disk usage, process memory and network address.
+- F1 sync sensor: shows whether the configured `f1_sensor` entities are currently providing driver data to the lightweight built-in F1 mode.
 - Weather entity select: choose which Home Assistant `weather.*` entity is synced to the photo frame clock, or select `Off`.
 - Events: `digital_frame_mode_changed`, `digital_frame_photo_changed`, `digital_frame_update_status_changed` and `digital_frame_problem_changed`.
 - Diagnostics: Home Assistant can download redacted integration diagnostics from the device/integration page.
@@ -109,6 +112,10 @@ data:
 service: digital_frame.show_mode_item
 data:
   mode_item_id: home-assistant
+```
+
+```yaml
+service: digital_frame.show_f1_dashboard
 ```
 
 ```yaml

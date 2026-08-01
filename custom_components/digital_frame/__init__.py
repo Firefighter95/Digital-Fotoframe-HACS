@@ -15,6 +15,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import DigitalFrameApi, DigitalFrameError
 from .const import (
     CONF_ACTOR,
+    CONF_F1_DASHBOARD_URL,
     CONF_PIN,
     DEFAULT_ACTOR,
     DEFAULT_PORT,
@@ -46,6 +47,7 @@ SERVICE_RESTART_KIOSK = "restart_kiosk"
 SERVICE_APPLY_UPDATE = "apply_update"
 SERVICE_SHOW_ADMIN_QR = "show_admin_qr"
 SERVICE_APPLY_SMART_MODE = "apply_smart_mode"
+SERVICE_SHOW_F1_DASHBOARD = "show_f1_dashboard"
 
 ENTRY_FIELD = {vol.Optional("entry_id"): cv.string}
 
@@ -217,6 +219,16 @@ def _async_register_services(hass: HomeAssistant) -> None:
     async def apply_smart_mode(call: ServiceCall) -> None:
         await _run_frame_call(hass, call, lambda api: api.async_display_control("apply_smart_mode"))
 
+    async def show_f1_dashboard(call: ServiceCall) -> None:
+        coordinator = _coordinator_from_call(hass, call)
+        url = str(coordinator.config_entry.options.get(CONF_F1_DASHBOARD_URL) or "").strip()
+        if not url:
+            raise HomeAssistantError("Set the F1 dashboard URL in the Digital Frame integration options first.")
+        try:
+            await coordinator.async_call_and_refresh(coordinator.api.async_show_url(url))
+        except DigitalFrameError as err:
+            raise HomeAssistantError(str(err)) from err
+
     def register_once(service: str, handler: Callable[[ServiceCall], Awaitable[None]], schema: vol.Schema) -> None:
         if not hass.services.has_service(DOMAIN, service):
             hass.services.async_register(DOMAIN, service, handler, schema=schema)
@@ -243,3 +255,4 @@ def _async_register_services(hass: HomeAssistant) -> None:
     register_once(SERVICE_APPLY_UPDATE, apply_update, ENTRY_ONLY_SCHEMA)
     register_once(SERVICE_SHOW_ADMIN_QR, show_admin_qr, ENTRY_ONLY_SCHEMA)
     register_once(SERVICE_APPLY_SMART_MODE, apply_smart_mode, ENTRY_ONLY_SCHEMA)
+    register_once(SERVICE_SHOW_F1_DASHBOARD, show_f1_dashboard, ENTRY_ONLY_SCHEMA)

@@ -33,6 +33,7 @@ class DigitalFrameConfigSelectDescription:
 
 CONFIG_SELECTS: tuple[DigitalFrameConfigSelectDescription, ...] = (
     DigitalFrameConfigSelectDescription("clock_position_select", "Clock position", "clockPosition", CLOCK_POSITION_OPTIONS, "mdi:clock-edit-outline"),
+    DigitalFrameConfigSelectDescription("countdown_position_select", "Countdown position", "countdownPosition", CLOCK_POSITION_OPTIONS, "mdi:timer-marker-outline"),
     DigitalFrameConfigSelectDescription("photo_fit_select", "Photo fit", "photoFit", PHOTO_FIT_OPTIONS, "mdi:fit-to-screen-outline"),
     DigitalFrameConfigSelectDescription("f1_provider_select", "F1 provider", "f1Provider", F1_PROVIDER_OPTIONS, "mdi:flag-checkered"),
     DigitalFrameConfigSelectDescription("smart_morning_mode_select", "Smart morning mode", "smartMorningMode", SMART_MODE_OPTIONS, "mdi:weather-sunset-up"),

@@ -236,6 +236,13 @@ show_admin_qr:
     entry_id:
       name: Config entry
 
+show_f1_dashboard:
+  name: Show F1 dashboard
+  description: Open the configured Home Assistant F1 dashboard fullscreen on the photo frame.
+  fields:
+    entry_id:
+      name: Config entry
+
 apply_smart_mode:
   name: Apply smart mode
   description: Apply the current smart-day schedule slot immediately.

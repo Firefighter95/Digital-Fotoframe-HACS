@@ -26,9 +26,16 @@
     "step": {
       "init": {
         "title": "Display options",
-        "description": "Choose a Home Assistant weather entity to show next to the clock on the photo frame.",
+        "description": "Choose the weather entity and optional F1 Sensor entities used by the photo frame.",
         "data": {
-          "weather_entity": "Weather entity"
+          "weather_entity": "Weather entity",
+          "f1_driver_positions_entity": "F1 driver positions sensor",
+          "f1_driver_list_entity": "F1 driver list sensor",
+          "f1_tyres_entity": "F1 tyres sensor",
+          "f1_track_status_entity": "F1 track status sensor",
+          "f1_current_session_entity": "F1 current session sensor",
+          "f1_race_lap_entity": "F1 race lap sensor",
+          "f1_dashboard_url": "F1 dashboard URL"
         }
       }
     }
@@ -66,6 +73,9 @@
       },
       "show_admin_qr": {
         "name": "Show admin QR"
+      },
+      "show_f1_dashboard": {
+        "name": "Show F1 dashboard"
       },
       "apply_smart_mode": {
         "name": "Apply smart mode"
@@ -117,6 +127,9 @@
       "clock_position_select": {
         "name": "Clock position"
       },
+      "countdown_position_select": {
+        "name": "Countdown position"
+      },
       "photo_fit_select": {
         "name": "Photo fit"
       },
@@ -139,9 +152,17 @@
         "name": "Smart night mode"
       }
     },
+    "sensor": {
+      "f1_sync": {
+        "name": "F1 sync"
+      }
+    },
     "switch": {
       "clock_enabled": {
         "name": "Clock"
+      },
+      "countdown_enabled": {
+        "name": "Countdown"
       },
       "shuffle": {
         "name": "Shuffle photos"
@@ -174,6 +195,12 @@
     "text": {
       "message_text": {
         "name": "Send message"
+      },
+      "countdown_title": {
+        "name": "Countdown title"
+      },
+      "countdown_target": {
+        "name": "Countdown target"
       },
       "smart_morning_start": {
         "name": "Smart morning start"

@@ -7,10 +7,11 @@ from typing import Any
 from homeassistant.components.button import ButtonDeviceClass, ButtonEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import DigitalFrameApi
-from .const import DOMAIN
+from .const import CONF_F1_DASHBOARD_URL, DOMAIN
 from .coordinator import DigitalFrameCoordinator
 from .entity import DigitalFrameEntity
 
@@ -115,7 +116,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator: DigitalFrameCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities(DigitalFrameButton(coordinator, description) for description in BUTTONS)
+    async_add_entities(
+        [DigitalFrameButton(coordinator, description) for description in BUTTONS]
+        + [DigitalFrameF1DashboardButton(coordinator)]
+    )
 
 
 class DigitalFrameButton(DigitalFrameEntity, ButtonEntity):
@@ -141,3 +145,24 @@ class DigitalFrameButton(DigitalFrameEntity, ButtonEntity):
 
     async def async_press(self) -> None:
         await self.coordinator.async_call_and_refresh(self.entity_description.method(self.coordinator.api))
+
+
+class DigitalFrameF1DashboardButton(DigitalFrameEntity, ButtonEntity):
+    _attr_icon = "mdi:monitor-dashboard"
+
+    def __init__(self, coordinator: DigitalFrameCoordinator) -> None:
+        super().__init__(coordinator, "show_f1_dashboard", "Show F1 dashboard")
+
+    @property
+    def available(self) -> bool:
+        permissions = (self.coordinator.data or {}).get("currentUser", {}).get("permissions", [])
+        return "display" in permissions and bool(self._dashboard_url()) and super().available
+
+    async def async_press(self) -> None:
+        url = self._dashboard_url()
+        if not url:
+            raise HomeAssistantError("Set the F1 dashboard URL in the Digital Frame integration options first.")
+        await self.coordinator.async_call_and_refresh(self.coordinator.api.async_show_url(url))
+
+    def _dashboard_url(self) -> str:
+        return str(self.coordinator.config_entry.options.get(CONF_F1_DASHBOARD_URL) or "").strip()

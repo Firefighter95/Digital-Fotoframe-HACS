@@ -11,6 +11,22 @@ DEFAULT_ACTOR = "Home Assistant"
 CONF_ACTOR = "actor"
 CONF_PIN = "pin"
 CONF_WEATHER_ENTITY = "weather_entity"
+CONF_F1_DRIVER_POSITIONS_ENTITY = "f1_driver_positions_entity"
+CONF_F1_DRIVER_LIST_ENTITY = "f1_driver_list_entity"
+CONF_F1_TYRES_ENTITY = "f1_tyres_entity"
+CONF_F1_TRACK_STATUS_ENTITY = "f1_track_status_entity"
+CONF_F1_CURRENT_SESSION_ENTITY = "f1_current_session_entity"
+CONF_F1_RACE_LAP_ENTITY = "f1_race_lap_entity"
+CONF_F1_DASHBOARD_URL = "f1_dashboard_url"
+
+DEFAULT_F1_SENSOR_ENTITIES = {
+    CONF_F1_DRIVER_POSITIONS_ENTITY: "sensor.f1_driver_positions",
+    CONF_F1_DRIVER_LIST_ENTITY: "sensor.f1_driver_list",
+    CONF_F1_TYRES_ENTITY: "sensor.f1_current_tyres",
+    CONF_F1_TRACK_STATUS_ENTITY: "sensor.f1_track_status",
+    CONF_F1_CURRENT_SESSION_ENTITY: "sensor.f1_current_session",
+    CONF_F1_RACE_LAP_ENTITY: "sensor.f1_race_lap_count",
+}
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,
@@ -64,5 +80,6 @@ PHOTO_FIT_OPTIONS = {
 
 F1_PROVIDER_OPTIONS = {
     "openf1": "OpenF1 live",
-    "off": "Off",
+    "homeassistant": "Home Assistant f1_sensor",
+    "off": "Manual/Home Assistant only",
 }

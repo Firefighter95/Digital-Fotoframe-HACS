@@ -26,9 +26,16 @@
     "step": {
       "init": {
         "title": "Display options",
-        "description": "Choose a Home Assistant weather entity to show next to the clock on the photo frame.",
+        "description": "Choose the weather entity and optional F1 Sensor entities used by the photo frame.",
         "data": {
-          "weather_entity": "Weather entity"
+          "weather_entity": "Weather entity",
+          "f1_driver_positions_entity": "F1 driver positions sensor",
+          "f1_driver_list_entity": "F1 driver list sensor",
+          "f1_tyres_entity": "F1 tyres sensor",
+          "f1_track_status_entity": "F1 track status sensor",
+          "f1_current_session_entity": "F1 current session sensor",
+          "f1_race_lap_entity": "F1 race lap sensor",
+          "f1_dashboard_url": "F1 dashboard URL"
         }
       }
     }
@@ -37,6 +44,16 @@
     "select": {
       "weather_entity_select": {
         "name": "Weather entity"
+      }
+    },
+    "button": {
+      "show_f1_dashboard": {
+        "name": "Show F1 dashboard"
+      }
+    },
+    "sensor": {
+      "f1_sync": {
+        "name": "F1 sync"
       }
     }
   }

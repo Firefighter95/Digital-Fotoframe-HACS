@@ -244,6 +244,16 @@ SENSORS: tuple[dict[str, Any], ...] = (
         "requires_system": True,
     },
     {
+        "key": "f1_sync",
+        "name": "F1 sync",
+        "value_fn": lambda data: "available" if data.get("f1Sync", {}).get("available") else "unavailable",
+        "icon": "mdi:flag-checkered",
+        "attributes_fn": lambda data: {
+            **(data.get("f1Sync") or {}),
+            "error": data.get("f1SyncError"),
+        },
+    },
+    {
         "key": "display_last_seen",
         "name": "Display last seen",
         "value_fn": lambda data: format_timestamp(_display(data).get("lastSeenAt")),
